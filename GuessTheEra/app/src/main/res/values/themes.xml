@@ -19,6 +19,11 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="Widget.GuessTheEra.Button" parent="Widget.MaterialComponents.Button">
+        <item name="backgroundTint">@color/yinmin_blue</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
     <style name="Theme.GuessTheEra.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
     <style name="Theme.GuessTheEra.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
