@@ -49,6 +49,7 @@ class LoadingPage: AppCompatActivity()  {
 
     private fun createFadeInAnimation() {
         fadeInAnimation = ObjectAnimator.ofFloat(gameTitleTV, "alpha", 0f, 1f)
+        fadeInAnimation.startDelay = 1000
         fadeInAnimation.duration = 1000 // Set the duration of the animation in milliseconds
         fadeInAnimation.interpolator = AccelerateDecelerateInterpolator()
     }
