@@ -1,5 +1,6 @@
 package group10.com.guesstheera
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
@@ -17,6 +18,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
+    private lateinit var intent: Intent
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -41,6 +43,8 @@ class MainActivity : AppCompatActivity() {
             R.id.nav_leaderboard, R.id.nav_game_options, R.id.nav_game_settings), drawerLayout)
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+        intent = Intent(this, LoginActivity::class.java)
+        startActivity(intent)
     }
 
     //provides overflow menu in action bar; not needed but gtk
