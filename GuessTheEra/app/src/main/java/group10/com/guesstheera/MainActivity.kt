@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity() {
             R.id.nav_leaderboard, R.id.nav_game_options, R.id.nav_game_settings), drawerLayout)
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
-        intent = Intent(this, LoginActivity::class.java)
+        intent = Intent(this, LoadingPage::class.java)
         startActivity(intent)
     }
 
