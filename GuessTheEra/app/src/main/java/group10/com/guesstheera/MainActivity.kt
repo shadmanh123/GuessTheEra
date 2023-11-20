@@ -2,6 +2,8 @@ package group10.com.guesstheera
 
 import android.os.Bundle
 import android.view.Menu
+import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
@@ -44,11 +46,20 @@ class MainActivity : AppCompatActivity() {
     }
 
     //provides overflow menu in action bar; not needed but gtk
-    /*override fun onCreateOptionsMenu(menu: Menu): Boolean {
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.main,  menu)
+        /*menuInflater.inflate(R.menu.main, menu)*/
+        //menuInflater.inflate(R.menu.activity_main_drawer, menu)
+        menuInflater.inflate(R.menu.main, menu)
+        /*val group = menu.findItem(R.id.drawer_group)
+
+        for (i in 0 until (group.subMenu?.size() ?: 2)) {
+            val menuItem = group.subMenu?.getItem(i)
+            menuItem?.let<MenuItem, View?> { findViewById(it.itemId) }
+                ?.setBackgroundResource(R.color.atomic_tangerine)
+        }*/
         return true
-    }*/
+    }
 
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_content_main)

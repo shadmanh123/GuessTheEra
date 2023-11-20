@@ -15,8 +15,9 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/Theme.GuessTheEra.PopupOverlay" />
+            android:background="@color/atomic_tangerine"
+            android:theme="@style/Theme.GuessTheEra"
+            app:popupTheme="@style/Theme.GuessTheEra.PopupMenuTheme"/>
 
     </com.google.android.material.appbar.AppBarLayout>
 

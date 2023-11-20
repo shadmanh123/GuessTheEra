@@ -15,4 +15,5 @@
     <string name="game_settings">Game Settings</string>
     <string name="leaderboard">Leaderboard</string>
     <string name="game_options">Game Options</string>
+    <string name="quick_settings">Quick Settings</string>
 </resources>

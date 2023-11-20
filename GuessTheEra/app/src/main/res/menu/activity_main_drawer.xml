@@ -1,20 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:showIn="navigation_view">
 
-    <group android:checkableBehavior="single">
+    <group
+        android:id="@+id/drawer_group"
+        android:checkableBehavior="single">
         <item
             android:id="@+id/nav_game_options"
-            android:icon="@drawable/ic_menu_chart"
+            android:icon="@drawable/ic_menu_game_options"
             android:title="@string/game_options" />
         <item
             android:id="@+id/nav_leaderboard"
-            android:icon="@drawable/ic_menu_chart"
+            android:icon="@drawable/ic_menu_leaderboard"
             android:title="@string/leaderboard" />
         <item
             android:id="@+id/nav_game_settings"
-            android:icon="@drawable/ic_menu_chart"
+            android:icon="@drawable/ic_menu_settings"
             android:title="@string/game_settings"/>
     </group>
 </menu>
