@@ -14,6 +14,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
+import group10.com.guesstheera.LoadingPage
 import group10.com.guesstheera.R
 import group10.com.guesstheera.databinding.ActivityMainBinding
 
