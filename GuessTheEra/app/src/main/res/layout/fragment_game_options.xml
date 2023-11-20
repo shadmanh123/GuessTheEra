@@ -4,7 +4,52 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/sage"
-    tools:context=".GameOptionsFragment">
+    android:background="@color/coffee"
+    android:gravity="center_horizontal"
+    tools:context=".mainview.GameOptionsFragment">
+
+    <TextView
+        android:id="@+id/options_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:textSize="45sp"
+        android:layout_centerHorizontal="true"
+        android:text="@string/difficulty" />
+
+    <LinearLayout
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/options_title"
+        android:layout_marginTop="40dp"
+        android:background="@color/sage"
+        android:layout_centerHorizontal="true"
+        android:gravity="center_horizontal"
+        android:paddingVertical="50dp"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/option_regular_mode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="20dp"
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+            android:textSize="25dp"
+            android:text="@string/regular_mode" />
+
+        <Button
+            android:id="@+id/option_hard_mode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="20dp"
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+            android:textSize="25dp"
+            android:text="@string/hard_mode" />
+
+    </LinearLayout>
+
+
 
 </RelativeLayout>
