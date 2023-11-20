@@ -12,6 +12,8 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+
+        <item name="android:popupMenuStyle">@style/Theme.GuessTheEra.PopupMenuTheme</item>
     </style>
 
     <style name="Theme.GuessTheEra.NoActionBar">
@@ -26,5 +28,7 @@
 
     <style name="Theme.GuessTheEra.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
-    <style name="Theme.GuessTheEra.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+    <style name="Theme.GuessTheEra.PopupMenuTheme" parent="Widget.Material3.PopupMenu">
+        <item name="android:popupBackground">@color/mauve</item>
+    </style>
 </resources>
