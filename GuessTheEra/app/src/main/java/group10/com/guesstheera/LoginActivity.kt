@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -72,7 +73,7 @@ class LoginActivity : AppCompatActivity() {
         } catch (e: ApiException) {
             // Handle sign-in failure.
             Log.w("GoogleSignIn", "signInResult:failed code=" + e.statusCode)
-            // You may want to show a message or take some action on failure.
+            Toast.makeText(this, "Please try again", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -84,7 +85,7 @@ class LoginActivity : AppCompatActivity() {
             // Update your UI or proceed with the signed-in user.
         } else {
             // The user is signed out.
-            // You may want to show a message or take some action on sign-out.
+            Toast.makeText(this, "Signed out successfully", Toast.LENGTH_SHORT).show()
         }
     }
 }
