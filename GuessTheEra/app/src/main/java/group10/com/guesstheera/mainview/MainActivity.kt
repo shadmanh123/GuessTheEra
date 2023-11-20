@@ -1,4 +1,4 @@
-package group10.com.guesstheera
+package group10.com.guesstheera.mainview
 
 import android.content.Intent
 import android.os.Bundle
@@ -14,6 +14,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
+import group10.com.guesstheera.R
 import group10.com.guesstheera.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {

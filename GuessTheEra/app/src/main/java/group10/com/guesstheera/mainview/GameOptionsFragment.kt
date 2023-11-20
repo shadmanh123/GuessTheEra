@@ -1,4 +1,4 @@
-package group10.com.guesstheera
+package group10.com.guesstheera.mainview
 
 import android.os.Bundle
 import android.view.LayoutInflater

@@ -1,4 +1,4 @@
-package group10.com.guesstheera
+package group10.com.guesstheera.mainview
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -22,6 +22,7 @@ class GameSettingsFragment : Fragment() {
 
         _binding = FragmentGameSettingsBinding.inflate(inflater, container, false)
         val root: View = binding.root
+        root
         return root
     }
 }
