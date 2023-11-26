@@ -1,6 +1,7 @@
 package group10.com.guesstheera.mainview
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -23,6 +24,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
     private lateinit var intent: Intent
+    private var isSignedIn: Boolean? = null
+    private lateinit var accountLoggedIn: SharedPreferences
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -47,8 +50,17 @@ class MainActivity : AppCompatActivity() {
             R.id.nav_game_options, R.id.nav_leaderboard, R.id.nav_game_settings), drawerLayout)
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
-        intent = Intent(this, LoadingPage::class.java)
-        startActivity(intent)
+//        navController.addOnDestinationChangedListener { _, destination, _ ->
+//            if (destination.id == R.id.nav_leaderboard) {
+//                intent = Intent(this, LoadingPage::class.java)
+//                startActivity(intent)
+//            }
+//        }
+        determineSignedIn()
+        if (isSignedIn == false) {
+            intent = Intent(this, LoadingPage::class.java)
+            startActivity(intent)
+        }
     }
 
     //provides overflow menu in action bar; not needed but gtk
@@ -70,6 +82,11 @@ class MainActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+    }
+
+    private fun determineSignedIn(){
+        accountLoggedIn = getSharedPreferences("accountLoggedIn", MODE_PRIVATE)
+        isSignedIn = accountLoggedIn.getBoolean("isSignedIn", false)
     }
 }
 

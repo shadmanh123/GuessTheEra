@@ -14,6 +14,8 @@ class LeaderboardListFragment(private val difficulty: String): Fragment() {
     private var leaderboardView: View? = null
     private var listView: ListView? = null
 
+    constructor() : this("")
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
