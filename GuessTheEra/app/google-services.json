@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1040859154514",
+    "project_id": "guesstheera",
+    "storage_bucket": "guesstheera.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1040859154514:android:75ac55e3535476e05e778b",
+        "android_client_info": {
+          "package_name": "group10.com.guesstheera"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBuYQ-P6Oz5ChtVXF4N0oVdPUC_0_FiNUk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
