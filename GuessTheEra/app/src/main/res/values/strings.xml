@@ -18,6 +18,10 @@
     <string name="difficulty">Difficulty</string>
     <string name="regular_mode">Regular</string>
     <string name="hard_mode">Hard</string>
-    <string name="default_web_client_id">498594274931-avsd5706e2couqdvr3jph7cno391s4it.apps.googleusercontent.com</string>
+<!--    <string name="default_web_client_id">498594274931-avsd5706e2couqdvr3jph7cno391s4it.apps.googleusercontent.com</string>-->
+    <string name="default_web_client_id">498594274931-ecra2d58d3eg0vj7ec0cpaj0n34bk0v9.apps.googleusercontent.com</string>
     <string name="quick_settings">Quick Settings</string>
+    <string name="something3" />
+    <string name="something2" />
+    <string name="something" />
 </resources>

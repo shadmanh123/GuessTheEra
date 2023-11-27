@@ -7,15 +7,28 @@
     >
 
     <Button
-        android:id="@+id/signInButton"
+        android:id="@+id/signInGoogleButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/yinmin_blue"
         android:text="Sign In with Google"
         android:textColor="@color/white"
-        android:backgroundTint="@color/yinmin_blue"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.45" />
+
+    <Button
+        android:id="@+id/signInButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="@color/yinmin_blue"
+        android:text="Play as Guest"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/signInGoogleButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
