@@ -86,7 +86,8 @@ class LoginActivity : AppCompatActivity() {
             updateUI(account)
         } catch (t: ApiException){
             Log.d("Login Activity", "signInResult: failed code + ${t.statusCode}")
-            updateUI(null)
+//            updateUI(null)
+            finish()
         }
     }
 
