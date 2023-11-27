@@ -23,9 +23,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
-    private lateinit var intent: Intent
-    private var isSignedIn: Boolean? = null
-    private lateinit var accountLoggedIn: SharedPreferences
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -56,11 +54,7 @@ class MainActivity : AppCompatActivity() {
 //                startActivity(intent)
 //            }
 //        }
-        determineSignedIn()
-        if (isSignedIn == false) {
-            intent = Intent(this, LoadingPage::class.java)
-            startActivity(intent)
-        }
+
     }
 
     //provides overflow menu in action bar; not needed but gtk
@@ -84,10 +78,6 @@ class MainActivity : AppCompatActivity() {
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
-    private fun determineSignedIn(){
-        accountLoggedIn = getSharedPreferences("accountLoggedIn", MODE_PRIVATE)
-        isSignedIn = accountLoggedIn.getBoolean("isSignedIn", false)
-    }
 }
 
 
