@@ -10,7 +10,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import group10.com.guesstheera.DifficultyUtil
 import group10.com.guesstheera.R
-import group10.com.guesstheera.RegularGameActivity
+import group10.com.guesstheera.GameActivity
 import group10.com.guesstheera.databinding.FragmentGameOptionsBinding
 
 class GameOptionsFragment: Fragment() {
@@ -34,21 +34,18 @@ class GameOptionsFragment: Fragment() {
 
         regularModeButton = root.findViewById(R.id.option_regular_mode)
         regularModeButton.setOnClickListener {
-            val intent = Intent(context, RegularGameActivity::class.java)
+            val intent = Intent(context, GameActivity::class.java)
             intent.putExtra(DIFFICULTY_KEY, DifficultyUtil.difficultyOptions[0])
             startActivity(intent)
         }
 
         hardModeButton = root.findViewById(R.id.option_hard_mode)
         hardModeButton.setOnClickListener {
-            Toast.makeText(context, "Not available in current Demo", Toast.LENGTH_LONG)
-                .show()
-            /*
             // can reuse game-activity here with minor tweaks based on difficulty as key
-            val intent = Intent(context, TODO class)
+            val intent = Intent(context, GameActivity::class.java)
             intent.putExtra(DIFFICULTY_KEY, DifficultyUtil.difficultyOptions[1])
             startActivity(intent)
-            */
+
         }
 
         return root

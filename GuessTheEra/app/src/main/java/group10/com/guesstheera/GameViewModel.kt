@@ -128,6 +128,13 @@ class GameViewModel : ViewModel() {
         timerHandler?.postDelayed(timerRunnable, 1000)
     }
 
+    fun timerStop() {
+        if (timerHandler == null) {
+            timerHandler = Handler(Looper.getMainLooper())
+        }
+        timerHandler?.removeCallbacks(timerRunnable)
+    }
+
     override fun onCleared() {
         super.onCleared()
         timerHandler?.removeCallbacks(timerRunnable)

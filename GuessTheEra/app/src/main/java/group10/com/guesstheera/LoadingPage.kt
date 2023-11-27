@@ -32,8 +32,8 @@ class LoadingPage: AppCompatActivity()  {
         animatorSet.addListener(object : AnimatorListenerAdapter() {
             override fun onAnimationEnd(animation: Animator) {
                 super.onAnimationEnd(animation)
-                intent = Intent(this@LoadingPage, LoginActivity::class.java)
-                startActivity(intent)
+                //intent = Intent(this@LoadingPage, LoginActivity::class.java)
+                //startActivity(intent)
                 // Finish the LoadingPage activity if you want
                 finish()
             }
