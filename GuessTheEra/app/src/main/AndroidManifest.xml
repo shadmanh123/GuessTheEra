@@ -28,7 +28,6 @@
         <activity android:name=".mainview.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.GuessTheEra.NoActionBar"/>
-        <activity android:name=".RegularGameActivity">
-        </activity>
+        <activity android:name=".GameActivity" />
     </application>
 </manifest>
