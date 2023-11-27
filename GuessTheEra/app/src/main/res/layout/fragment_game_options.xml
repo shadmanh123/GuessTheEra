@@ -48,6 +48,16 @@
             android:textSize="25dp"
             android:text="@string/hard_mode" />
 
+        <Button
+            android:id="@+id/option_custom_mode"
+            android:layout_width="145dp"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="20dp"
+            android:text="Custom"
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+            android:textSize="25dp" />
+
     </LinearLayout>
 
 

@@ -22,6 +22,7 @@ class GameOptionsFragment: Fragment() {
 
     private lateinit var regularModeButton: Button
     private lateinit var hardModeButton: Button
+    private lateinit var customModeButton: Button
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,6 +48,9 @@ class GameOptionsFragment: Fragment() {
             startActivity(intent)
 
         }
+
+        customModeButton = root.findViewById(R.id.option_custom_mode)
+        customModeButton.isEnabled = false
 
         return root
     }
