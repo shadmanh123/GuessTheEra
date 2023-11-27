@@ -47,7 +47,8 @@ class LoginActivity : AppCompatActivity() {
             signIn()
         }
         signInLocallyButton.setOnClickListener {
-            finish()
+            intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
         }
     }
 
