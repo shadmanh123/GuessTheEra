@@ -2,7 +2,7 @@ package group10.com.guesstheera.mainview
 
 import android.app.AlertDialog
 import android.app.Dialog
-import android.os.Build.VERSION_CODES.R
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,7 +13,9 @@ import android.widget.PopupMenu
 import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
+import group10.com.guesstheera.R
 import group10.com.guesstheera.databinding.FragmentGameSettingsBinding
 
 class GameSettingsFragment : Fragment() {
@@ -28,7 +30,6 @@ class GameSettingsFragment : Fragment() {
 
         _binding = FragmentGameSettingsBinding.inflate(inflater, container, false)
         val root: View = binding.root
-        root
 
         binding.imageAdjust.setOnClickListener {
             showYearRangeDialog()
@@ -49,11 +50,11 @@ class GameSettingsFragment : Fragment() {
 
         popupMenu.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
-                R.id.choose_year -> {
+                R.id.optionA -> {
                     println("the accuracy range will be one year")
                     true
                 }
-                R.id.choose_decade -> {
+                R.id.optionB -> {
                     println("the accuracy range will be one decade")
                     true
                 }
@@ -64,6 +65,7 @@ class GameSettingsFragment : Fragment() {
         popupMenu.show()
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -72,6 +74,7 @@ class GameSettingsFragment : Fragment() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun showTimeAdjustDialog() {
         val minimumValue = 15
         val maximumValue = 30
@@ -80,12 +83,11 @@ class GameSettingsFragment : Fragment() {
             .inflate(R.layout.dialog_time_adjust, null)
 
         val timeTextView = dialogView.findViewById<TextView>(R.id.timeTextView)
-        val seekBar = dialogView.findViewById<SeekBar>(R.id.seekBar)
+        val seekBar = dialogView.findViewById<SeekBar>(R.id.timeAdjustSeekBar)
         seekBar.min = minimumValue
         seekBar.max = maximumValue
 
-        val currentValue = // Get the current value, use some default initially
-            seekBar.progress = currentValue - minValue
+        val currentValue = seekBar.progress
         timeTextView.text = "$currentValue seconds"
 
         seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
@@ -128,7 +130,7 @@ class GameSettingsFragment : Fragment() {
         endYearPicker.maxValue = 2014
 
 
-        val okButton: Button = dialog.findViewById(R.id.okButton)
+        val okButton: Button = dialog.findViewById(R.id.confirmButton)
         okButton.setOnClickListener {
             val selectedStartYear = startYearPicker.value
             val selectedEndYear = endYearPicker.value
