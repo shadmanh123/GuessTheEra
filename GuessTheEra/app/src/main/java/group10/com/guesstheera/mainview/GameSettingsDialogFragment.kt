@@ -23,7 +23,9 @@ class GameSettingsDialogFragment : DialogFragment() {
 //    private var _binding: FragmentGameSettingsBinding? = null
 //    private val binding get() = _binding!!
     private lateinit var view: View
-
+    private lateinit var timerButton: Button
+    private lateinit var imageYearRangeButton: Button
+    private lateinit var guessAccuracyRangeButton: Button
     companion object{
         fun newInstance(): GameSettingsDialogFragment{
             val fragment = GameSettingsDialogFragment()
@@ -35,7 +37,17 @@ class GameSettingsDialogFragment : DialogFragment() {
         val builder = Builder(requireActivity())
         view = requireActivity().layoutInflater.inflate(R.layout.game_settings_dialog, null)
         builder.setView(view)
+        timerButton = view.findViewById(R.id.timeAdjustBtn)
+        imageYearRangeButton = view.findViewById(R.id.imageAdjustBtn)
+        guessAccuracyRangeButton = view.findViewById(R.id.guessAdjustBtn)
+        timerButton.setOnClickListener {
+            adjustTimer()
+        }
         return builder.create()
+    }
+
+    private fun adjustTimer() {
+        TODO("Not yet implemented")
     }
 //    override fun onCreateView(
 //        inflater: LayoutInflater,
