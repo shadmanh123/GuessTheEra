@@ -7,10 +7,26 @@
     android:orientation="vertical"
     android:padding="16dp">
 
+    <TextView
+        android:id="@+id/startYearPickerTV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/earliest_year_picker"
+        android:textColor="@color/black"
+        android:gravity="center"/>
+
     <NumberPicker
         android:id="@+id/startYearPicker"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/endYearPickerTV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/latest_year_picker"
+        android:textColor="@color/black"
+        android:gravity="center"/>
 
     <NumberPicker
         android:id="@+id/endYearPicker"
