@@ -1,20 +1,12 @@
 package group10.com.guesstheera.mainview
 
-import android.app.AlertDialog
 import android.app.AlertDialog.Builder
 import android.app.Dialog
-import android.os.Build
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Button
-import android.widget.NumberPicker
-import android.widget.PopupMenu
-import android.widget.SeekBar
-import android.widget.TextView
-import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.fragment.app.DialogFragment
 import group10.com.guesstheera.R
 //import group10.com.guesstheera.databinding.FragmentGameSettingsBinding
@@ -26,6 +18,7 @@ class GameSettingsDialogFragment : DialogFragment() {
     private lateinit var timerButton: Button
     private lateinit var imageYearRangeButton: Button
     private lateinit var guessAccuracyRangeButton: Button
+    private lateinit var gameSettingsStored: SharedPreferences
     companion object{
         fun newInstance(): GameSettingsDialogFragment{
             val fragment = GameSettingsDialogFragment()
@@ -47,7 +40,8 @@ class GameSettingsDialogFragment : DialogFragment() {
     }
 
     private fun adjustTimer() {
-        TODO("Not yet implemented")
+        val timerAdjustmentDialogFragment = TimerAdjustmentDialogFragment.newInstance()
+        timerAdjustmentDialogFragment.show(parentFragmentManager, "TimerAdjustmentDialogFragment")
     }
 //    override fun onCreateView(
 //        inflater: LayoutInflater,

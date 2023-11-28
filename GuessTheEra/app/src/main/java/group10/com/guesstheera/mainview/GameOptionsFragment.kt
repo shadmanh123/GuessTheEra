@@ -50,7 +50,10 @@ class GameOptionsFragment: Fragment() {
         }
 
         customModeButton = root.findViewById(R.id.option_custom_mode)
-        customModeButton.isEnabled = false
+        customModeButton.setOnClickListener {
+            val dialogFragment = GameSettingsDialogFragment.newInstance()
+            dialogFragment.show(parentFragmentManager, "GameSettingsDialogFragment")
+        }
 
         return root
     }
