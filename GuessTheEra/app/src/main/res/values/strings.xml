@@ -32,4 +32,6 @@
     <string name="guess_accuracy_range">Customize Guess Accuracy Range</string>
     <string name="set">Set</string>
     <string name="adjust_time">Adjust Time</string>
+    <string name="by_the_year">By The Year</string>
+    <string name="by_the_decade">By The Decade</string>
 </resources>

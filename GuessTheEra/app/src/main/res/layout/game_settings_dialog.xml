@@ -61,5 +61,6 @@
             android:text="@string/guess_accuracy_range"
             android:textColor="@color/white" />
 
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
