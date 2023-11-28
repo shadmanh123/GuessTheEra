@@ -13,7 +13,7 @@
         android:theme="@style/Theme.GuessTheEra"
         tools:targetApi="31">
         <activity
-            android:name=".mainview.MainActivity"
+            android:name=".LoadingPage"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.GuessTheEra.NoActionBar">
@@ -25,7 +25,9 @@
         </activity>
 
         <activity android:name=".LoginActivity"/>
-        <activity android:name=".LoadingPage"/>
+        <activity android:name=".mainview.MainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.GuessTheEra.NoActionBar"/>
         <activity android:name=".GameActivity">
         </activity>
     </application>
