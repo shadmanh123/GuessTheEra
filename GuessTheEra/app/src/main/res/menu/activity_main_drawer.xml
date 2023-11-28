@@ -15,9 +15,9 @@
             android:id="@+id/nav_leaderboard"
             android:icon="@drawable/ic_menu_leaderboard"
             android:title="@string/leaderboard" />
-        <item
-            android:id="@+id/nav_game_settings"
-            android:icon="@drawable/ic_menu_settings"
-            android:title="@string/game_settings"/>
+<!--        <item-->
+<!--            android:id="@+id/nav_game_settings"-->
+<!--            android:icon="@drawable/ic_menu_settings"-->
+<!--            android:title="@string/game_settings"/>-->
     </group>
 </menu>
