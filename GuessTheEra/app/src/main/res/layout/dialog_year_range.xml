@@ -1,22 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- dialog_year_range.xml -->
 
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp">
 
     <NumberPicker
         android:id="@+id/startYearPicker"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content" />
 
     <NumberPicker
         android:id="@+id/endYearPicker"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -24,17 +23,19 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/confirmButton"
+            android:id="@+id/setButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Confirm"/>
+            android:text="@string/set"
+            android:textColor="@color/white"/>
 
         <Button
             android:id="@+id/cancelButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Cancel"/>
+            android:text="@string/cancel"
+            android:textColor="@color/white"/>
     </LinearLayout>
 </LinearLayout>

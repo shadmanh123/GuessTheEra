@@ -36,12 +36,25 @@ class GameSettingsDialogFragment : DialogFragment() {
         timerButton.setOnClickListener {
             adjustTimer()
         }
+        imageYearRangeButton.setOnClickListener {
+            adjustImageRange()
+        }
+        guessAccuracyRangeButton.setOnClickListener {
+            adjustGuessRange()
+        }
         return builder.create()
     }
 
     private fun adjustTimer() {
         val timerAdjustmentDialogFragment = TimerAdjustmentDialogFragment.newInstance()
-        timerAdjustmentDialogFragment.show(parentFragmentManager, "TimerAdjustmentDialogFragment")
+        timerAdjustmentDialogFragment.show(parentFragmentManager, TimerAdjustmentDialogFragment.TAG)
+    }
+    private fun adjustImageRange() {
+        val imageRangeAdjustmentDialogFragment = ImageRangeAdjustmentDialogFragment.newInstance()
+        imageRangeAdjustmentDialogFragment.show(parentFragmentManager, ImageRangeAdjustmentDialogFragment.TAG)
+    }
+    private fun adjustGuessRange() {
+        TODO("Not yet implemented")
     }
 //    override fun onCreateView(
 //        inflater: LayoutInflater,
