@@ -24,4 +24,10 @@
     <string name="something3" />
     <string name="something2" />
     <string name="something" />
+    <string name="cancel">Cancel</string>
+    <string name="confirm">Confirm</string>
+    <string name="time_per_round">Time Per Round</string>
+    <string name="image_year_range">Image Year Range</string>
+    <string name="adjust">Adjust</string>
+    <string name="guess_accuracy_range">Guess Accuracy Range</string>
 </resources>
