@@ -7,6 +7,7 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
@@ -17,7 +18,8 @@ class GuessAccuracyRangeDialogFragment: DialogFragment() {
     private lateinit var guessAccuracyRange: RadioGroup
     private lateinit var setButton: Button
     private lateinit var cancelButton: Button
-    private lateinit var gameSettingsStored: SharedPreferences
+    private var selectedOption = 1
+
     companion object{
         const val TAG = "GuessAccuracyRangeDialogFragment"
         fun newInstance(): GuessAccuracyRangeDialogFragment{
@@ -28,25 +30,24 @@ class GuessAccuracyRangeDialogFragment: DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val builder = AlertDialog.Builder(requireActivity())
-        view = requireParentFragment().layoutInflater.inflate(R.layout.guess_accuracy_menu, null)
+        view = requireParentFragment().layoutInflater.inflate(R.layout.dialog_game_mode, null)
         builder.setView(view)
         guessAccuracyRange = view.findViewById(R.id.guessAcuracyRangeRadioGroup)
         setButton = view.findViewById(R.id.setButton)
         cancelButton = view.findViewById(R.id.cancelButton)
+
+        guessAccuracyRange.setOnCheckedChangeListener { group, checkedId ->
+            val radioButton = view.findViewById<RadioButton>(checkedId)
+            selectedOption = group.indexOfChild(radioButton)
+        }
+
         setButton.setOnClickListener {
             if (guessAccuracyRange.checkedRadioButtonId != -1){
-                val selectedOption = when(guessAccuracyRange.checkedRadioButtonId){
-                    R.id.yearButton -> "year"
-                    R.id.decadeButton -> "decade"
-                    else ->""
+                val result = Bundle().apply {
+                    selectedOption?.let { it1 -> putInt("selectedMode", it1) }
                 }
-                if (selectedOption.isNotEmpty()) {
-                    gameSettingsStored = requireContext().getSharedPreferences("gameSettingsStored", Context.MODE_PRIVATE)
-                    val editor = gameSettingsStored.edit()
-                    editor.putString("guessAccuracyRange", selectedOption)
-                    editor.apply()
-                    dismiss()
-                }
+                parentFragmentManager.setFragmentResult("modeKey", result)
+                dismiss()
             }
             else{
                 Toast.makeText(requireContext(), "Select an option", Toast.LENGTH_SHORT).show()
@@ -57,4 +58,5 @@ class GuessAccuracyRangeDialogFragment: DialogFragment() {
         }
         return builder.create()
     }
+
 }

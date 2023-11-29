@@ -29,11 +29,11 @@
     <string name="time_per_round">Customize Time Per Round</string>
     <string name="image_year_range">Customize Image Year Range</string>
     <string name="adjust">Adjust</string>
-    <string name="guess_accuracy_range">Customize Guess Accuracy Range</string>
+    <string name="guess_accuracy_range">Regular or Hard Mode</string>
     <string name="set">Set</string>
     <string name="adjust_time">Adjust Time</string>
-    <string name="by_the_year">By The Year</string>
-    <string name="by_the_decade">By The Decade</string>
+    <string name="by_the_year">Hard (By Year)</string>
+    <string name="by_the_decade">Regular (By Decade)</string>
     <string name="earliest_year_picker">Earliest Year Picker:</string>
     <string name="latest_year_picker">Latest Year Picker:</string>
 </resources>

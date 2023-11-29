@@ -46,6 +46,11 @@
             android:text="@string/set"
             android:textColor="@color/white"/>
 
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".2" />
+
         <Button
             android:id="@+id/cancelButton"
             android:layout_width="0dp"
