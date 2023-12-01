@@ -4,6 +4,8 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Intent
+import android.graphics.ColorMatrix
+import android.graphics.ColorMatrixColorFilter
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -17,6 +19,7 @@ import androidx.core.app.ActivityCompat.recreate
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import group10.com.guesstheera.mainview.GameOptionsFragment.Companion.DIFFICULTY_KEY
 import group10.com.guesstheera.mainview.LeaderboardFragment
 import group10.com.guesstheera.mainview.MainActivity
 import kotlin.math.absoluteValue
@@ -41,6 +44,10 @@ class GameActivity : AppCompatActivity() {
     private var multiplier = 1.0
     private var consecutiveCorrectGuesses = 0
 
+    private var customMode = 0
+    private var customTime = 30 //set default time
+    private var customGrayscale = false
+
     companion object{
         private val DIFFICULTY_KEY = "option_difficulty"
         private val SCORE_KEY = "SCORE"
@@ -63,80 +70,119 @@ class GameActivity : AppCompatActivity() {
         gameIntent = intent.getStringExtra(DIFFICULTY_KEY).toString()
 
         if (gameIntent == "regular"){
-            //initiate regular game mode
-            gameViewModel.startTimer()
-
-            //set the current image
-            image.setImageResource(gameViewModel.gameList.first())
-
-            //call helper function when player guesses or they run out of time
-            guess.setOnClickListener {
-                updateUIOnGuess()
-            }
-
-            gameViewModel.counter.observe(this, Observer { timeLeft ->
-                if (timeLeft > 0) {
-                    timer.text = "Time: $timeLeft"
-                } else {
-                    updateUIOnGuess()
-                }
-            })
-
-            //use seekbar to get the guess from user
-            slider.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-                override fun onProgressChanged(slider: SeekBar, progress: Int, fromUser: Boolean) {
-                    val decade = 1900 + (progress * 10)
-                    yearSelected.text = "$decade 's"
-                }
-
-                override fun onStartTrackingTouch(slider: SeekBar) {
-                    //not necessary
-                }
-
-                override fun onStopTrackingTouch(slider: SeekBar) {
-                    //not necessary
-                }
-            })
+            startRegularModeGame(30)
         }
         //hard mode set
+        else if (gameIntent == "hard"){
+            startHardModeGame(30)
+        }
+        //custom game mode set. customize base on input parameters
         else{
-            //same as easy mode, calling update hard mode functions instead and setting slider to 120 instead of 6
-            gameViewModel.startTimer()
-            //hard game setting
-            slider.max = 120
-            slider.progress = 60
+            customMode = intent.getIntExtra("custom_mode", 1)
+            customTime = intent.getIntExtra("custom_time", 30)
+            customGrayscale = intent.getBooleanExtra("custom_grayscale", false)
 
-            image.setImageResource(gameViewModel.gameList.first())
-
-            guess.setOnClickListener {
-                updateUIOnGuessHard()
+            //player set easy mode
+            if (customMode == 0){
+                startHardModeGame(customTime)
             }
-
-            gameViewModel.counter.observe(this, Observer { timeLeft ->
-                if (timeLeft > 0) {
-                    timer.text = "Time: $timeLeft"
-                } else {
-                    updateUIOnGuessHard()
-                }
-            })
-
-            slider.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-                override fun onProgressChanged(slider: SeekBar, progress: Int, fromUser: Boolean) {
-                    val year = 1900 + progress
-                    yearSelected.text = "$year"
-                }
-
-                override fun onStartTrackingTouch(slider: SeekBar) {
-                    //not necessary
-                }
-
-                override fun onStopTrackingTouch(slider: SeekBar) {
-                    //not necessary
-                }
-            })
+            //player set hard mode
+            else {
+                startRegularModeGame(customTime)
+            }
         }
     }
 
+    private fun startRegularModeGame(time:Int){
+        //initiate regular game mode
+        gameViewModel.startTimer(time)
+        //set grayscale for custom mode
+        if (customGrayscale) {
+            //create a grayscale ColorMatrix
+            val colorMatrix = ColorMatrix()
+            colorMatrix.setSaturation(0f) // 0 means grayscale
+
+            //apply the ColorMatrix to a ColorMatrixColorFilter
+            val filter = ColorMatrixColorFilter(colorMatrix)
+            image.colorFilter = filter
+        }
+        //set the current image
+        image.setImageResource(gameViewModel.gameList.first())
+
+        //call helper function when player guesses or they run out of time
+        guess.setOnClickListener {
+            updateUIOnGuess(time)
+        }
+
+        gameViewModel.counter.observe(this, Observer { timeLeft ->
+            if (timeLeft > 0) {
+                timer.text = "Time: $timeLeft"
+            } else {
+                updateUIOnGuess(time)
+            }
+        })
+
+        //use seekbar to get the guess from user
+        slider.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(slider: SeekBar, progress: Int, fromUser: Boolean) {
+                val decade = 1900 + (progress * 10)
+                yearSelected.text = "$decade 's"
+            }
+
+            override fun onStartTrackingTouch(slider: SeekBar) {
+                //not necessary
+            }
+
+            override fun onStopTrackingTouch(slider: SeekBar) {
+                //not necessary
+            }
+        })
+    }
+    private fun startHardModeGame(time:Int){
+        //same as easy mode, calling update hard mode functions instead and setting slider to 120 instead of 6
+        gameViewModel.startTimer(time)
+        //hard game setting
+        slider.max = 120
+        slider.progress = 60
+
+        if (customGrayscale) {
+            //create a grayscale ColorMatrix
+            val colorMatrix = ColorMatrix()
+            colorMatrix.setSaturation(0f) // 0 means grayscale
+
+            //apply the ColorMatrix to a ColorMatrixColorFilter
+            val filter = ColorMatrixColorFilter(colorMatrix)
+            image.colorFilter = filter
+        }
+        image.setImageResource(gameViewModel.gameList.first())
+
+        guess.setOnClickListener {
+            updateUIOnGuessHard(time)
+        }
+
+        gameViewModel.counter.observe(this, Observer { timeLeft ->
+            if (timeLeft > 0) {
+                timer.text = "Time: $timeLeft"
+            } else {
+                updateUIOnGuessHard(time)
+            }
+        })
+
+        slider.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(slider: SeekBar, progress: Int, fromUser: Boolean) {
+                val year = 1900 + progress
+                yearSelected.text = "$year"
+            }
+
+            override fun onStartTrackingTouch(slider: SeekBar) {
+                //not necessary
+            }
+
+            override fun onStopTrackingTouch(slider: SeekBar) {
+                //not necessary
+            }
+        })
+    }
     //provided by ChatGPT https://chat.openai.com/share/fc88a8dc-61c2-40c1-b37c-ec21b56ee7bf
     //rounds image year to decade it was taken for comparison in regular
     private fun roundToNearestTen(number: Int): Int {
@@ -187,7 +233,7 @@ class GameActivity : AppCompatActivity() {
         return score.toInt()
     }
 
-    private fun updateUIOnGuess(){
+    private fun updateUIOnGuess(time: Int){
         //get year and guess year
         currentGuess  = sliderToDecade(slider.progress)
         currentImage = roundToNearestTen(gameViewModel.yearList[currentIndex-1].toInt())
@@ -200,8 +246,18 @@ class GameActivity : AppCompatActivity() {
             score.text = "Score: $totalScore"
 
             //iterate list and set slider for next image
+            if (customGrayscale) {
+                //create a grayscale ColorMatrix
+                val colorMatrix = ColorMatrix()
+                colorMatrix.setSaturation(0f) // 0 means grayscale
+
+                //apply the ColorMatrix to a ColorMatrixColorFilter
+                val filter = ColorMatrixColorFilter(colorMatrix)
+                image.colorFilter = filter
+            }
             image.setImageResource(gameViewModel.gameList[currentIndex])
-            gameViewModel.startTimer()
+
+            gameViewModel.startTimer(time)
             currentIndex++
             slider.progress = 6
         } else {
@@ -273,7 +329,7 @@ class GameActivity : AppCompatActivity() {
     }
 
     //mostly the same, except get year of image and year of slider, set slider progress to 60 instead of 6
-    private fun updateUIOnGuessHard(){
+    private fun updateUIOnGuessHard(time: Int){
         currentGuess  = sliderToYear(slider.progress)
         currentImage = gameViewModel.yearList[currentIndex-1].toInt()
         Log.d("DEBUG PRINT:", "image year $currentImage, Guess from slider $currentGuess")
@@ -283,8 +339,19 @@ class GameActivity : AppCompatActivity() {
             totalScore += checkGuessHard(currentImage, currentGuess)
             score.text = "Score: $totalScore"
 
+            if (customGrayscale) {
+                //create a grayscale ColorMatrix
+                val colorMatrix = ColorMatrix()
+                colorMatrix.setSaturation(0f) // 0 means grayscale
+
+                //apply the ColorMatrix to a ColorMatrixColorFilter
+                val filter = ColorMatrixColorFilter(colorMatrix)
+                image.colorFilter = filter
+            }
+
             image.setImageResource(gameViewModel.gameList[currentIndex])
-            gameViewModel.startTimer()
+
+            gameViewModel.startTimer(time)
             currentIndex++
             slider.progress = 60
         } else {
@@ -313,7 +380,9 @@ class GameActivity : AppCompatActivity() {
         playAgain.setOnClickListener {
             dialog.dismiss()
             //restart the GameActivity
-            recreate(activity!!)
+            //reset view model images
+            gameViewModel.resetGameImageList()
+            this@GameActivity.recreate()
         }
 
         showLeaderboard.setOnClickListener {

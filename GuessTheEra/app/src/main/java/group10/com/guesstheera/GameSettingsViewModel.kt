@@ -22,4 +22,12 @@ class GameSettingsViewModel : ViewModel() {
         _mode.value = value
     }
 
+    fun getTime(): Int? {
+        return _time.value
+    }
+
+    fun getMode(): Int? {
+        return _mode.value
+    }
+
 }
