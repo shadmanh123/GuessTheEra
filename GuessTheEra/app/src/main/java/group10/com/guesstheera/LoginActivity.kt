@@ -15,6 +15,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import androidx.activity.result.contract.ActivityResultContracts
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import group10.com.guesstheera.mainview.MainActivity
 
 
@@ -28,21 +31,23 @@ class LoginActivity : AppCompatActivity() {
     private var account: GoogleSignInAccount? = null
     private lateinit var accountLoggedIn: SharedPreferences
     private lateinit var intent: Intent
+    private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.login_page)
-        configureGoogleSignIn()
-        signInGoogleButton = findViewById(R.id.signInGoogleButton)
-        signInGoogleButton.visibility = View.GONE
-        signInLocallyButton = findViewById(R.id.signInButton)
-        signInLocallyButton.visibility = View.GONE
+        auth = Firebase.auth
+//        configureGoogleSignIn()
+//        signInGoogleButton = findViewById(R.id.signInGoogleButton)
+//        signInGoogleButton.visibility = View.GONE
+//        signInLocallyButton = findViewById(R.id.signInButton)
+//        signInLocallyButton.visibility = View.GONE
     }
 
     override fun onStart() {
         super.onStart()
-        var account = GoogleSignIn.getLastSignedInAccount(this)
-        updateUI(account)
+//        var account = GoogleSignIn.getLastSignedInAccount(this)
+//        updateUI(account)
         signInGoogleButton.setOnClickListener {
             signIn()
         }
@@ -77,39 +82,39 @@ class LoginActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == RC_SIGN_IN) {
-            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-            handleSignInResult(task)
-        }
-        intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
+//        if (requestCode == RC_SIGN_IN) {
+//            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+//            handleSignInResult(task)
+//        }
+//        intent = Intent(this, MainActivity::class.java)
+//        startActivity(intent)
     }
 
     private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
-        try {
-            account = completedTask.getResult(ApiException::class.java)
-            updateUI(account)
-        } catch (t: ApiException){
-            Log.d("Login Activity", "signInResult: failed code + ${t.statusCode}")
-//            updateUI(null)
-            finish()
-        }
+//        try {
+//            account = completedTask.getResult(ApiException::class.java)
+//            updateUI(account)
+//        } catch (t: ApiException){
+//            Log.d("Login Activity", "signInResult: failed code + ${t.statusCode}")
+////            updateUI(null)
+//            finish()
+//        }
     }
 
     private fun updateUI(account: GoogleSignInAccount?) {
 //        Log.d("Login Activity", "update UI")
-        if (account != null) {
-            Log.d("Login Activity", "account not null")
-
-            // The user is signed in, you can get information from the 'account' object.
-            val displayName = account.displayName
-            val email = account.email
-            finish()
-            // Update your UI or proceed with the signed-in user.
-        } else {
-//            Log.d("Login Activity", "account is null")
-            signInGoogleButton.visibility = View.VISIBLE
-            signInLocallyButton.visibility = View.VISIBLE
-        }
+//        if (account != null) {
+//            Log.d("Login Activity", "account not null")
+//
+//            // The user is signed in, you can get information from the 'account' object.
+//            val displayName = account.displayName
+//            val email = account.email
+//            finish()
+//            // Update your UI or proceed with the signed-in user.
+//        } else {
+////            Log.d("Login Activity", "account is null")
+//            signInGoogleButton.visibility = View.VISIBLE
+//            signInLocallyButton.visibility = View.VISIBLE
+//        }
     }
 }
