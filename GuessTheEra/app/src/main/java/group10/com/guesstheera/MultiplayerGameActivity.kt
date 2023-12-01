@@ -2,33 +2,33 @@ package group10.com.guesstheera
 
 import android.app.Activity
 import android.app.AlertDialog
-import android.app.Dialog
 import android.content.Intent
 import android.graphics.ColorMatrix
 import android.graphics.ColorMatrixColorFilter
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.SeekBar
+import android.widget.TextClock
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat.recreate
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
-import group10.com.guesstheera.mainview.GameOptionsFragment.Companion.DIFFICULTY_KEY
-import group10.com.guesstheera.mainview.LeaderboardFragment
+import com.google.firebase.database.ValueEventListener
+import group10.com.guesstheera.R
 import group10.com.guesstheera.mainview.MainActivity
 import group10.com.guesstheera.mainview.code
 import kotlin.math.absoluteValue
-import kotlin.time.times
 
-class GameActivity : AppCompatActivity() {
-
+class MultiplayerGameActivity : AppCompatActivity() {
+//https://chat.openai.com/share/638070d6-c768-43f5-8c90-8cf248bc9f0a
     private lateinit var yearSelected: TextView
     private lateinit var slider: SeekBar
     private lateinit var timer: TextView
@@ -46,69 +46,77 @@ class GameActivity : AppCompatActivity() {
     private var multiplier = 1.0
     private var consecutiveCorrectGuesses = 0
 
-    private var customMode = 0
-    private var customTime = 30 //set default time
-    private var customGrayscale = false
-
-    companion object{
-        val DIFFICULTY_KEY = "option_difficulty"
-        private val SCORE_KEY = "SCORE"
-    }
+    private lateinit var gameRef: DatabaseReference
+    private var player1Id = ""
+    private var player2Id = ""
+    private var player1Stage = 0
+    private var player2Stage = 0
+    private var opponentScore = 0
+    private lateinit var opponentTotalScore: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        setContentView(R.layout.gameplay)
+        setContentView(R.layout.activity_multiplayer_game)
         slider = findViewById(R.id.sliderDecades);
         yearSelected = findViewById(R.id.selectedYear)
         timer = findViewById(R.id.timer)
         guess = findViewById(R.id.btnLockInGuess)
         image = findViewById(R.id.image)
         score = findViewById(R.id.score)
+        opponentTotalScore = findViewById(R.id.opponentScore)
 
-
+        gameRef = FirebaseDatabase.getInstance().reference.child("games").child(code)
         gameViewModel = ViewModelProvider(this).get(GameViewModel::class.java)
 
         //get the game type that will be played
-        gameIntent = intent.getStringExtra(DIFFICULTY_KEY).toString()
+        gameIntent = intent.getStringExtra(GameActivity.DIFFICULTY_KEY).toString()
 
         if (gameIntent == "Regular"){
             startRegularModeGame(30)
         }
         //hard mode set
-        else if (gameIntent == "Hard"){
+        else {
             startHardModeGame(30)
         }
-        //custom game mode set. customize base on input parameters
-        else{
-            customMode = intent.getIntExtra("custom_mode", 1)
-            customTime = intent.getIntExtra("custom_time", 30)
-            customGrayscale = intent.getBooleanExtra("custom_grayscale", false)
 
-            //player set easy mode
-            if (customMode == 0){
-                startHardModeGame(customTime)
-            }
-            //player set hard mode
-            else {
-                startRegularModeGame(customTime)
-            }
-        }
+        gameRef.addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists()) {
+                        player1Id = snapshot.child("player1").getValue(String::class.java).toString()
+                        player2Id = snapshot.child("player2").getValue(String::class.java).toString()
+
+                        //if player1 id is associated with this instance
+                        if (player1Id == personId){
+                            opponentScore = snapshot.child("player2").child("score").getValue(Int::class.java)!!
+                            opponentTotalScore.text = "Opponent Score: $opponentScore"
+                        }
+                        //if player2 id is associated with this instance
+                        else{
+                            opponentScore = snapshot.child("player1").child("score").getValue(Int::class.java)!!
+                            opponentTotalScore.text = "Opponent Score: $opponentScore"
+                        }
+
+                        player1Stage = snapshot.child(player1Id).child("stage").getValue(Int::class.java) ?: 0
+                        player2Stage = snapshot.child(player2Id).child("stage").getValue(Int::class.java) ?: 0
+
+                        if (player1Stage == 5 && player2Stage == 5) {
+                            // Both players have finished the game
+                            // Proceed to compare scores and decide the winner
+                        }
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                }
+            })
     }
+
 
     private fun startRegularModeGame(time:Int){
         //initiate regular game mode
         gameViewModel.startTimer(time)
         //set grayscale for custom mode
-        if (customGrayscale) {
-            //create a grayscale ColorMatrix
-            val colorMatrix = ColorMatrix()
-            colorMatrix.setSaturation(0f) // 0 means grayscale
 
-            //apply the ColorMatrix to a ColorMatrixColorFilter
-            val filter = ColorMatrixColorFilter(colorMatrix)
-            image.colorFilter = filter
-        }
         //set the current image
         image.setImageResource(gameViewModel.gameList.first())
 
@@ -148,15 +156,6 @@ class GameActivity : AppCompatActivity() {
         slider.max = 120
         slider.progress = 60
 
-        if (customGrayscale) {
-            //create a grayscale ColorMatrix
-            val colorMatrix = ColorMatrix()
-            colorMatrix.setSaturation(0f) // 0 means grayscale
-
-            //apply the ColorMatrix to a ColorMatrixColorFilter
-            val filter = ColorMatrixColorFilter(colorMatrix)
-            image.colorFilter = filter
-        }
         image.setImageResource(gameViewModel.gameList.first())
 
         guess.setOnClickListener {
@@ -248,16 +247,19 @@ class GameActivity : AppCompatActivity() {
             totalScore += checkGuess(currentImage, currentGuess)
             score.text = "Score: $totalScore"
 
-            //iterate list and set slider for next image
-            if (customGrayscale) {
-                //create a grayscale ColorMatrix
-                val colorMatrix = ColorMatrix()
-                colorMatrix.setSaturation(0f) // 0 means grayscale
-
-                //apply the ColorMatrix to a ColorMatrixColorFilter
-                val filter = ColorMatrixColorFilter(colorMatrix)
-                image.colorFilter = filter
+            //if player1 id is associated with this instance
+            if (player1Id == personId){
+                gameRef.child(player1Id).child("score").setValue(totalScore)
+                gameRef.child(player1Id).child("stage").setValue(currentIndex)
             }
+            //if player2 id is associated with this instance
+            else{
+                gameRef.child(player2Id).child("score").setValue(totalScore)
+                gameRef.child(player2Id).child("stage").setValue(currentIndex)
+            }
+
+
+            //iterate list and set slider for next image
             image.setImageResource(gameViewModel.gameList[currentIndex])
 
             gameViewModel.startTimer(time)
@@ -266,12 +268,22 @@ class GameActivity : AppCompatActivity() {
         } else {
             totalScore += checkGuess(currentImage, currentGuess)
             score.text = "Score: $totalScore"
-            //maybe create intent for new fragment or activity showing score
+            //if player1 id is associated with this instance
+            if (player1Id == personId){
+                gameRef.child(player1Id).child("score").setValue(totalScore)
+                gameRef.child(player1Id).child("stage").setValue(currentIndex)
+            }
+            //if player2 id is associated with this instance
+            else{
+                gameRef.child(player2Id).child("score").setValue(totalScore)
+                gameRef.child(player2Id).child("stage").setValue(currentIndex)
+            }
             guess.isEnabled = false
             gameViewModel.timerStop()
             //show dialog that game is ended with final score, ability to go to leaderboard or play another game
             showGameFinishedDialog(this)
         }
+        gameRef.child("player_score").setValue(totalScore)
     }
 
     //different scoring system based on difficulty
@@ -341,15 +353,15 @@ class GameActivity : AppCompatActivity() {
             //lock in current guess
             totalScore += checkGuessHard(currentImage, currentGuess)
             score.text = "Score: $totalScore"
-
-            if (customGrayscale) {
-                //create a grayscale ColorMatrix
-                val colorMatrix = ColorMatrix()
-                colorMatrix.setSaturation(0f) // 0 means grayscale
-
-                //apply the ColorMatrix to a ColorMatrixColorFilter
-                val filter = ColorMatrixColorFilter(colorMatrix)
-                image.colorFilter = filter
+            //if player1 id is associated with this instance
+            if (player1Id == personId){
+                gameRef.child(player1Id).child("score").setValue(totalScore)
+                gameRef.child(player1Id).child("stage").setValue(currentIndex)
+            }
+            //if player2 id is associated with this instance
+            else{
+                gameRef.child(player2Id).child("score").setValue(totalScore)
+                gameRef.child(player2Id).child("stage").setValue(currentIndex)
             }
 
             image.setImageResource(gameViewModel.gameList[currentIndex])
@@ -361,32 +373,35 @@ class GameActivity : AppCompatActivity() {
             //lock in current guess
             totalScore += checkGuessHard(currentImage, currentGuess)
             score.text = "Score: $totalScore"
-            //maybe create intent for new fragment or activity showing score
+            //if player1 id is associated with this instance
+            if (player1Id == personId){
+                gameRef.child(player1Id).child("score").setValue(totalScore)
+                gameRef.child(player1Id).child("stage").setValue(currentIndex)
+            }
+            //if player2 id is associated with this instance
+            else{
+                gameRef.child(player2Id).child("score").setValue(totalScore)
+                gameRef.child(player2Id).child("stage").setValue(currentIndex)
+            }
+
             guess.isEnabled = false
             gameViewModel.timerStop()
             showGameFinishedDialog(this)
         }
+        gameRef.child("player_score").setValue(totalScore)
     }
 
     //dialog created upon finishing the game or running out of time
     private fun showGameFinishedDialog(activity: Activity?) {
-        val dialogView = LayoutInflater.from(activity).inflate(R.layout.game_finish_dialog, null)
+        val dialogView = LayoutInflater.from(activity).inflate(R.layout.multiplayer_game_finish_dialog, null)
         val dialog = AlertDialog.Builder(activity)
             .setView(dialogView)
             .create()
         val finalScore: TextView = dialogView.findViewById(R.id.finalScore)
-        val playAgain: Button = dialogView.findViewById(R.id.buttonPlayAgain)
         val showLeaderboard: Button = dialogView.findViewById(R.id.buttonLeaderboard)
 
         finalScore.text = "Score: $totalScore"
-        // Set up the button click listeners
-        playAgain.setOnClickListener {
-            dialog.dismiss()
-            //restart the GameActivity
-            //reset view model images
-            gameViewModel.resetGameImageList()
-            this@GameActivity.recreate()
-        }
+
 
         showLeaderboard.setOnClickListener {
             dialog.dismiss()
@@ -406,6 +421,3 @@ class GameActivity : AppCompatActivity() {
         startActivity(intent)
     }
 }
-
-
-

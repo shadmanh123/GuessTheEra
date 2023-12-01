@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
-import android.view.inputmethod.TextSnapshot
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
@@ -15,10 +14,10 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import group10.com.guesstheera.DifficultyUtil
 import group10.com.guesstheera.GameActivity
+import group10.com.guesstheera.MultiplayerGameActivity
 import group10.com.guesstheera.R
-import java.lang.reflect.Field
+import group10.com.guesstheera.personId
 
 var isCodeMaker = true
 var code = "null"
@@ -62,7 +61,7 @@ class OnlineGameStartActivity : AppCompatActivity() {
             loading.visibility = View.VISIBLE
             if(code!= "null" && code!="") {
                 isCodeMaker = true
-                FirebaseDatabase.getInstance().reference.child("codes").addValueEventListener(object: ValueEventListener{
+                FirebaseDatabase.getInstance().reference.child("games").addValueEventListener(object: ValueEventListener{
                     override fun onDataChange(snapshot: DataSnapshot) {
                         var check = isValueAvailable(snapshot, code)
                         Handler().postDelayed({
@@ -74,7 +73,12 @@ class OnlineGameStartActivity : AppCompatActivity() {
                                 progressBar.visibility = View.GONE
                                 loading.visibility = View.GONE
                             }else{
-                                FirebaseDatabase.getInstance().reference.child("codes").push().setValue(code)
+                                //need to create a check for player ID being null
+                                val gameId = FirebaseDatabase.getInstance().reference.child("games").push().key
+                                FirebaseDatabase.getInstance().reference.child("games").child(gameId.toString()).child("player1").setValue(personId)
+                                FirebaseDatabase.getInstance().reference.child("games").child(gameId.toString()).child("gameCode").setValue(code)
+                                FirebaseDatabase.getInstance().reference.child("games").push().setValue(code)
+
                                 isValueAvailable(snapshot, code)
                                 checkTemp = false
                                 Handler().postDelayed({
@@ -114,11 +118,12 @@ class OnlineGameStartActivity : AppCompatActivity() {
                 progressBar.visibility = View.VISIBLE
                 loading.visibility = View.VISIBLE
                 isCodeMaker = false
-                FirebaseDatabase.getInstance().reference.child("codes").addValueEventListener(object: ValueEventListener{
+                FirebaseDatabase.getInstance().reference.child("games").addValueEventListener(object: ValueEventListener{
                     override fun onDataChange(snapshot: DataSnapshot) {
                         var data : Boolean = isValueAvailable(snapshot, code)
                         Handler().postDelayed({
                             if(data){
+                                FirebaseDatabase.getInstance().reference.child("games").child(code).child("player2").setValue(personId)
                                 codeFound = true
                                 accepted()
                                 createBtn.visibility = View.VISIBLE

@@ -17,7 +17,7 @@ import com.google.android.gms.tasks.Task
 import androidx.activity.result.contract.ActivityResultContracts
 import group10.com.guesstheera.mainview.MainActivity
 
-
+var personId: String? = "null"
 class LoginActivity : AppCompatActivity() {
 
     private val RC_SIGN_IN = 1440939901 // You can use any value here
@@ -104,6 +104,7 @@ class LoginActivity : AppCompatActivity() {
             // The user is signed in, you can get information from the 'account' object.
             val displayName = account.displayName
             val email = account.email
+            personId = account.id
             finish()
             // Update your UI or proceed with the signed-in user.
         } else {
