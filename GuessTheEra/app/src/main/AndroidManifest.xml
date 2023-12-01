@@ -13,6 +13,12 @@
         android:theme="@style/Theme.GuessTheEra"
         tools:targetApi="31">
         <activity
+            android:name=".mainview.MultiplayerGameActivity"
+            android:exported="false" />
+        <activity
+            android:name=".mainview.OnlineGameStartActivity"
+            android:exported="false" />
+        <activity
             android:name=".LoadingPage"
             android:exported="true"
             android:screenOrientation="portrait"
@@ -23,12 +29,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".LoginActivity"/>
-        <activity android:name=".mainview.MainActivity"
+        <activity android:name=".LoginActivity" />
+        <activity
+            android:name=".mainview.MainActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.GuessTheEra.NoActionBar"/>
-        <activity android:name=".GameActivity">
-        </activity>
+            android:theme="@style/Theme.GuessTheEra.NoActionBar" />
+        <activity android:name=".GameActivity" />
     </application>
+
 </manifest>

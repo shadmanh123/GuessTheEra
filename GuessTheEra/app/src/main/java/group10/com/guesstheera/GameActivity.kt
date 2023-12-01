@@ -49,7 +49,7 @@ class GameActivity : AppCompatActivity() {
     private var customGrayscale = false
 
     companion object{
-        private val DIFFICULTY_KEY = "option_difficulty"
+        val DIFFICULTY_KEY = "option_difficulty"
         private val SCORE_KEY = "SCORE"
     }
 
@@ -69,11 +69,11 @@ class GameActivity : AppCompatActivity() {
         //get the game type that will be played
         gameIntent = intent.getStringExtra(DIFFICULTY_KEY).toString()
 
-        if (gameIntent == "regular"){
+        if (gameIntent == "Regular"){
             startRegularModeGame(30)
         }
         //hard mode set
-        else if (gameIntent == "hard"){
+        else if (gameIntent == "Hard"){
             startHardModeGame(30)
         }
         //custom game mode set. customize base on input parameters

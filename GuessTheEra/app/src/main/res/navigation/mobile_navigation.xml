@@ -13,14 +13,14 @@
         tools:layout="@layout/fragment_leaderboard" />
 
     <fragment
-        android:id="@+id/nav_game_options"
-        android:name="group10.com.guesstheera.mainview.GameOptionsFragment"
+        android:id="@+id/nav_game_options_multiplayer"
+        android:name="group10.com.guesstheera.mainview.MultiplayerGameOptionsFragment"
         android:label="Game Options"
         tools:layout="@layout/fragment_game_options" />
 
     <fragment
-        android:id="@+id/nav_game_settings"
-        android:name="group10.com.guesstheera.mainview.GameSettingsDialogFragment"
+        android:id="@+id/nav_game_options"
+        android:name="group10.com.guesstheera.mainview.GameOptionsFragment"
         android:label="Settings"
         tools:layout="@layout/game_settings_dialog"/>
 
