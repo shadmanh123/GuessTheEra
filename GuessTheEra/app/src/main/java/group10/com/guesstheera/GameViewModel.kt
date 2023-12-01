@@ -104,22 +104,27 @@ class GameViewModel : ViewModel() {
     private val timerRunnable = object : Runnable {
         override fun run() {
             // Decrement the counter
-            val currentCount = _counter.value ?: 30
-            _counter.postValue(currentCount - 1)
+            val currentCount = _counter.value
+            if (currentCount != null) {
+                _counter.postValue(currentCount - 1)
+            }
             // Post the next decrement to be run after 1 second
             timerHandler?.postDelayed(this, 1000)
 
         }
     }
 
-    fun startTimer() {
+    fun resetGameImageList(){
+        gameList = getRandomSubList(imageList, 5)
+    }
+    fun startTimer(time: Int) {
         // Initialize the handler if not already done
         if (timerHandler == null) {
             timerHandler = Handler(Looper.getMainLooper())
         }
 
         // Reset the counter value
-        _counter.value = 30
+        _counter.value = time
 
         // Remove any existing callbacks to prevent multiple timers running
         timerHandler?.removeCallbacks(timerRunnable)

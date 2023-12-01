@@ -59,6 +59,6 @@ class GameOptionsFragment: Fragment() {
     }
 
     companion object{
-        private val DIFFICULTY_KEY = "option_difficulty"
+        val DIFFICULTY_KEY = "option_difficulty"
     }
 }
