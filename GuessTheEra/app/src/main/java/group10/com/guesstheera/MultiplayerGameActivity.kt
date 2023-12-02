@@ -281,7 +281,7 @@ class MultiplayerGameActivity : AppCompatActivity() {
             if (player1Id == personId){
                 gameRef.child("player1").child("score").setValue(totalScore)
                 gameRef.child("player1").child("stage").setValue(currentIndex)
-                gameRef.child("player2").child("UID").setValue(player1Id)
+                gameRef.child("player1").child("UID").setValue(player1Id)
             }
             //if player2 id is associated with this instance
             else{
@@ -386,14 +386,17 @@ class MultiplayerGameActivity : AppCompatActivity() {
             totalScore += checkGuessHard(currentImage, currentGuess)
             score.text = "Score: $totalScore"
             //if player1 id is associated with this instance
-            val playerRef = if (player1Id == personId) {
-                gameRef.child("player1")
-            } else {
-                gameRef.child("player2")
+            if (player1Id == personId){
+                gameRef.child("player1").child("score").setValue(totalScore)
+                gameRef.child("player1").child("stage").setValue(currentIndex)
+                gameRef.child("player1").child("UID").setValue(player1Id)
             }
-
-            playerRef.child("score").setValue(totalScore)
-            playerRef.child("stage").setValue(currentIndex)
+            //if player2 id is associated with this instance
+            else{
+                gameRef.child("player2").child("score").setValue(totalScore)
+                gameRef.child("player2").child("stage").setValue(currentIndex)
+                gameRef.child("player2").child("UID").setValue(player2Id)
+            }
 
 
             guess.isEnabled = false
