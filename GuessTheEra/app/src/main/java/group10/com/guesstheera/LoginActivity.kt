@@ -15,6 +15,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import androidx.activity.result.contract.ActivityResultContracts
+import com.google.android.gms.auth.api.identity.BeginSignInRequest
+import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -32,16 +34,16 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var accountLoggedIn: SharedPreferences
     private lateinit var intent: Intent
     private lateinit var auth: FirebaseAuth
+    private lateinit var oneTapClient: SignInClient
+    private lateinit var signInRequest: BeginSignInRequest
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.login_page)
         auth = Firebase.auth
+
+
 //        configureGoogleSignIn()
-//        signInGoogleButton = findViewById(R.id.signInGoogleButton)
-//        signInGoogleButton.visibility = View.GONE
-//        signInLocallyButton = findViewById(R.id.signInButton)
-//        signInLocallyButton.visibility = View.GONE
     }
 
     override fun onStart() {
@@ -53,6 +55,7 @@ class LoginActivity : AppCompatActivity() {
         }
         signInLocallyButton.setOnClickListener {
             intent = Intent(this, MainActivity::class.java)
+            intent.putExtra("isAuth", false)
             startActivity(intent)
         }
     }
