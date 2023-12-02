@@ -27,7 +27,7 @@ import com.google.firebase.ktx.Firebase
 import group10.com.guesstheera.mainview.GuessAccuracyRangeDialogFragment.Companion.TAG
 import group10.com.guesstheera.mainview.MainActivity
 
-var personId: String? = "null"
+var personId: String? = "Guest"
 class LoginActivity : AppCompatActivity() {
     private val RC_SIGN_IN = 123 // You can use any value here
 
@@ -95,6 +95,9 @@ class LoginActivity : AppCompatActivity() {
                     // Sign in success, update UI with the signed-in user's information
                     Log.d(TAG, "signInWithCredential:success")
                     val user = auth.currentUser
+                    if (user != null) {
+                        personId = user.uid
+                    }
                     var intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)
                     // You can update the UI or navigate to the main activity here
