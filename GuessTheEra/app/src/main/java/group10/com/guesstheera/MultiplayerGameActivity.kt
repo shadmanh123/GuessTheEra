@@ -87,12 +87,14 @@ class MultiplayerGameActivity : AppCompatActivity() {
         gameRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()) {
-                    player1Id = snapshot.child("player1").getValue(String::class.java) ?: ""
-                    player2Id = snapshot.child("player2").getValue(String::class.java) ?: ""
+                    if (player1Id == "" && player2Id =="") {
+                        player1Id = snapshot.child("player1").getValue(String::class.java) ?: ""
+                        player2Id = snapshot.child("player2").getValue(String::class.java) ?: ""
+                    }
                     Log.d("Player names:", "Player 1 pix3: $player1Id, Player 2 pix6: $player2Id")
                     //ensure player IDs are not empty, CANNOT CHECK UNTIL USERNAME IS FIXED
                     if (player1Id.isNotEmpty() && player2Id.isNotEmpty()) {
-                        // if player1 id is associated with this instance
+                        //if player1 id is associated with this instance
                         opponentScore = if (player1Id == personId) {
                             snapshot.child("player2").child("score").getValue(Int::class.java) ?: 0
                         } else {
@@ -254,15 +256,15 @@ class MultiplayerGameActivity : AppCompatActivity() {
             score.text = "Score: $totalScore"
 
             //if player1 id is associated with this instance
-            if (player1Id == personId){
-                gameRef.child("player1").child("score").setValue(totalScore)
-                gameRef.child("player1").child("stage").setValue(currentIndex)
+            val playerRef = if (player1Id == personId) {
+                gameRef.child("player1")
+            } else {
+                gameRef.child("player2")
             }
-            //if player2 id is associated with this instance
-            else{
-                gameRef.child("player2").child("score").setValue(totalScore)
-                gameRef.child("player2").child("stage").setValue(currentIndex)
-            }
+
+            playerRef.child("score").setValue(totalScore)
+            playerRef.child("stage").setValue(currentIndex)
+
 
 
             //iterate list and set slider for next image
@@ -271,6 +273,7 @@ class MultiplayerGameActivity : AppCompatActivity() {
             gameViewModel.startTimer(time)
             currentIndex++
             slider.progress = 6
+
         } else {
             totalScore += checkGuess(currentImage, currentGuess)
             score.text = "Score: $totalScore"
@@ -278,12 +281,16 @@ class MultiplayerGameActivity : AppCompatActivity() {
             if (player1Id == personId){
                 gameRef.child("player1").child("score").setValue(totalScore)
                 gameRef.child("player1").child("stage").setValue(currentIndex)
+                gameRef.child("player2").child("UID").setValue(player1Id)
             }
             //if player2 id is associated with this instance
             else{
                 gameRef.child("player2").child("score").setValue(totalScore)
                 gameRef.child("player2").child("stage").setValue(currentIndex)
+                gameRef.child("player2").child("UID").setValue(player2Id)
             }
+
+
             guess.isEnabled = false
             gameViewModel.timerStop()
             //show dialog that game is ended with final score, ability to go to leaderboard or play another game
@@ -359,15 +366,15 @@ class MultiplayerGameActivity : AppCompatActivity() {
             totalScore += checkGuessHard(currentImage, currentGuess)
             score.text = "Score: $totalScore"
             //if player1 id is associated with this instance
-            if (player1Id == personId){
-                gameRef.child("player1").child("score").setValue(totalScore)
-                gameRef.child("player1").child("stage").setValue(currentIndex)
+            val playerRef = if (player1Id == personId) {
+                gameRef.child("player1")
+            } else {
+                gameRef.child("player2")
             }
-            //if player2 id is associated with this instance
-            else{
-                gameRef.child("player2").child("score").setValue(totalScore)
-                gameRef.child("player2").child("stage").setValue(currentIndex)
-            }
+
+            playerRef.child("score").setValue(totalScore)
+            playerRef.child("stage").setValue(currentIndex)
+
 
             image.setImageResource(gameViewModel.gameList[currentIndex])
 
@@ -379,15 +386,15 @@ class MultiplayerGameActivity : AppCompatActivity() {
             totalScore += checkGuessHard(currentImage, currentGuess)
             score.text = "Score: $totalScore"
             //if player1 id is associated with this instance
-            if (player1Id == personId){
-                gameRef.child("player1").child("score").setValue(totalScore)
-                gameRef.child("player1").child("stage").setValue(currentIndex)
+            val playerRef = if (player1Id == personId) {
+                gameRef.child("player1")
+            } else {
+                gameRef.child("player2")
             }
-            //if player2 id is associated with this instance
-            else{
-                gameRef.child("player2").child("score").setValue(totalScore)
-                gameRef.child("player2").child("stage").setValue(currentIndex)
-            }
+
+            playerRef.child("score").setValue(totalScore)
+            playerRef.child("stage").setValue(currentIndex)
+
 
             guess.isEnabled = false
             gameViewModel.timerStop()
