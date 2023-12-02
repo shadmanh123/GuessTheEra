@@ -2,6 +2,7 @@ package group10.com.guesstheera.mainview
 
 import android.os.Bundle
 import android.view.Menu
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
@@ -10,6 +11,7 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.auth.FirebaseAuth
 import group10.com.guesstheera.R
 import group10.com.guesstheera.databinding.ActivityMainBinding
 
@@ -17,15 +19,16 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
+    private lateinit var signOutButton: Button
+    private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        auth = FirebaseAuth.getInstance()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         setSupportActionBar(binding.appBarMain.toolbar)
-
         /*//floating mail button listener
         binding.appBarMain.fab.setOnClickListener {
             view ->
@@ -42,6 +45,11 @@ class MainActivity : AppCompatActivity() {
             R.id.nav_game_options,R.id.nav_game_options_multiplayer, R.id.nav_leaderboard), drawerLayout)
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+        signOutButton = navView.getHeaderView(0).findViewById(R.id.signOutButton)
+        signOutButton.setOnClickListener {
+            auth.signOut()
+            finish()
+        }
 //        navController.addOnDestinationChangedListener { _, destination, _ ->
 //            if (destination.id == R.id.nav_leaderboard) {
 //                intent = Intent(this, LoadingPage::class.java)
