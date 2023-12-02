@@ -39,6 +39,7 @@ class LoadingPage: AppCompatActivity()  {
             isSignedIn = true
         }
     }
+
     private fun createAnimation() {
         animatorSet = AnimatorSet()
         animatorSet.playSequentially(fadeInAnimation, fadeOutAnimation)
