@@ -14,17 +14,14 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import group10.com.guesstheera.DifficultyUtil
 import group10.com.guesstheera.GameActivity
 import group10.com.guesstheera.MultiplayerGameActivity
 import group10.com.guesstheera.R
 import group10.com.guesstheera.personId
 
-var isCodeMaker = true
-var code = "null"
-var codeFound = false
-var checkTemp = true
-var keyValue: String = "null"
 
+var code = "null"
 class OnlineGameStartActivity : AppCompatActivity() {
     private lateinit var heading: TextView
     private lateinit var loading: TextView
@@ -32,8 +29,10 @@ class OnlineGameStartActivity : AppCompatActivity() {
     private lateinit var createBtn: Button
     private lateinit var joinBtn: Button
     private lateinit var progressBar: ProgressBar
+    private var gameId = ""
 
     private var gameIntent = ""
+    //need to make sure gamemdoes are the same as well in the database
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_online_game_start)
@@ -47,119 +46,86 @@ class OnlineGameStartActivity : AppCompatActivity() {
         gameIntent = intent.getStringExtra(GameActivity.DIFFICULTY_KEY).toString()
         heading.text = "$gameIntent Mode"
 
+
         createBtn.setOnClickListener {
-            code = "null"
-            codeFound = false
-            checkTemp = true
-            keyValue = "null"
             code = gameCode.text.toString()
-            createBtn.visibility = View.GONE
-            joinBtn.visibility = View.GONE
-            gameCode.visibility = View.GONE
-            heading.visibility = View.GONE
-            progressBar.visibility = View.VISIBLE
-            loading.visibility = View.VISIBLE
-            if(code!= "null" && code!="") {
-                isCodeMaker = true
-                FirebaseDatabase.getInstance().reference.child("games").addValueEventListener(object: ValueEventListener{
-                    override fun onDataChange(snapshot: DataSnapshot) {
-                        var check = isValueAvailable(snapshot, code)
-                        Handler().postDelayed({
-                            if(check){
-                                createBtn.visibility = View.VISIBLE
-                                joinBtn.visibility = View.VISIBLE
-                                gameCode.visibility = View.VISIBLE
-                                heading.visibility = View.VISIBLE
-                                progressBar.visibility = View.GONE
-                                loading.visibility = View.GONE
-                            }else{
-                                //need to create a check for player ID being null
-                                val gameId = FirebaseDatabase.getInstance().reference.child("games").push().key
-                                FirebaseDatabase.getInstance().reference.child("games").child(gameId.toString()).child("player1").setValue(personId)
-                                FirebaseDatabase.getInstance().reference.child("games").child(gameId.toString()).child("gameCode").setValue(code)
-                                FirebaseDatabase.getInstance().reference.child("games").push().setValue(code)
-
-                                isValueAvailable(snapshot, code)
-                                checkTemp = false
-                                Handler().postDelayed({
-                                    accepted()
-                                    Toast.makeText(this@OnlineGameStartActivity, "Please do not exit", Toast.LENGTH_SHORT).show()
-                                }, 300)
-                            }
-                        }, 2000)
-                    }
-
-                    override fun onCancelled(error: DatabaseError) {
-
-                    }
-                })
-            }else{
-                createBtn.visibility = View.VISIBLE
-                joinBtn.visibility = View.VISIBLE
-                gameCode.visibility = View.VISIBLE
-                heading.visibility = View.VISIBLE
-                progressBar.visibility = View.GONE
-                loading.visibility = View.GONE
-                Toast.makeText(this, "Please Enter a Valid Game Code", Toast.LENGTH_SHORT).show()
-            }
-        }
-
-        joinBtn.setOnClickListener {
-            code = "null"
-            codeFound = false
-            checkTemp = true
-            keyValue = "null"
-            code = gameCode.text.toString()
-            if(code!= "null" && code!="") {
+            //to be deleted
+            personId = "fran"
+            if (code != "null" && code != "") {
                 createBtn.visibility = View.GONE
                 joinBtn.visibility = View.GONE
                 gameCode.visibility = View.GONE
                 heading.visibility = View.GONE
                 progressBar.visibility = View.VISIBLE
                 loading.visibility = View.VISIBLE
-                isCodeMaker = false
-                FirebaseDatabase.getInstance().reference.child("games").addValueEventListener(object: ValueEventListener{
-                    override fun onDataChange(snapshot: DataSnapshot) {
-                        var data : Boolean = isValueAvailable(snapshot, code)
-                        Handler().postDelayed({
-                            if(data){
-                                FirebaseDatabase.getInstance().reference.child("games").child(code).child("player2").setValue(personId)
-                                codeFound = true
+                val newGameRef = FirebaseDatabase.getInstance().reference.child("games").push()
+                gameId = newGameRef.key.toString()
+                newGameRef.child("gameCode").setValue(code)
+                newGameRef.child("gameType").setValue(gameIntent)
+                newGameRef.child("player1").setValue(personId)
+
+
+                // Listen for player2 to join
+                FirebaseDatabase.getInstance().reference.child("games").child(gameId)
+                    .addValueEventListener(object : ValueEventListener {
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            if (snapshot.child("player2").exists()) {
+                                // Player2 has joined, start the game
                                 accepted()
-                                createBtn.visibility = View.VISIBLE
-                                joinBtn.visibility = View.VISIBLE
-                                gameCode.visibility = View.VISIBLE
-                                heading.visibility = View.VISIBLE
-                                progressBar.visibility = View.GONE
-                                loading.visibility = View.GONE
-                            }else{
-                                createBtn.visibility = View.VISIBLE
-                                joinBtn.visibility = View.VISIBLE
-                                gameCode.visibility = View.VISIBLE
-                                heading.visibility = View.VISIBLE
-                                progressBar.visibility = View.GONE
-                                loading.visibility = View.GONE
-                                Toast.makeText(this@OnlineGameStartActivity, "Invalid Game Code", Toast.LENGTH_SHORT).show()
+                                FirebaseDatabase.getInstance().reference.child("games")
+                                    .child(gameId)
+                                    .removeEventListener(this) // Remove listener after player2 joins
                             }
-                        }, 2000)
-                    }
+                        }
 
-                    override fun onCancelled(error: DatabaseError) {
-
-                    }
-                })
-
-            }else{
+                        override fun onCancelled(error: DatabaseError) {
+                            // Handle error
+                        }
+                    })
+            } else {
                 Toast.makeText(this, "Please Enter a Valid Game Code", Toast.LENGTH_SHORT).show()
             }
         }
+
+        joinBtn.setOnClickListener {
+            //to be deleted
+            personId = "NOT fran"
+            code = gameCode.text.toString()
+            if (code != "null" && code != "") {
+                progressBar.visibility = View.VISIBLE
+                loading.visibility = View.VISIBLE
+
+                FirebaseDatabase.getInstance().reference.child("games")
+                    .orderByChild("gameCode").equalTo(code)
+                    .addListenerForSingleValueEvent(object : ValueEventListener {
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            if (snapshot.exists()) {
+                                val gameSession = snapshot.children.firstOrNull()
+                                if (gameSession != null && !gameSession.child("player2").exists()) {
+                                    gameId = gameSession.key.toString() // Set the gameId for joining user
+                                    gameSession.ref.child("player2").setValue(personId)
+                                    accepted()
+                                } else {
+                                    Toast.makeText(this@OnlineGameStartActivity, "Game is full or doesn't exist", Toast.LENGTH_SHORT).show()
+                                }
+                            } else {
+                                Toast.makeText(this@OnlineGameStartActivity, "Invalid Game Code", Toast.LENGTH_SHORT).show()
+                            }
+                            resetUiVisibility()
+                        }
+
+                        override fun onCancelled(error: DatabaseError) {
+                            resetUiVisibility()
+                        }
+                    })
+            } else {
+                Toast.makeText(this, "Please Enter a Valid Game Code", Toast.LENGTH_SHORT).show()
+            }
+        }
+
     }
 
-    fun accepted(){
-        val intent = Intent(this, MultiplayerGameActivity::class.java)
-        //intent.putExtra(MultiplayerGameOptionsFragment.DIFFICULTY_KEY, DifficultyUtil.difficultyOptions[0])
-        startActivity(intent)
-
+    fun resetUiVisibility() {
         createBtn.visibility = View.VISIBLE
         joinBtn.visibility = View.VISIBLE
         gameCode.visibility = View.VISIBLE
@@ -167,16 +133,17 @@ class OnlineGameStartActivity : AppCompatActivity() {
         progressBar.visibility = View.GONE
         loading.visibility = View.GONE
     }
+    fun accepted() {
+        val intent = Intent(this, MultiplayerGameActivity::class.java)
+        intent.putExtra(GameActivity.DIFFICULTY_KEY, gameIntent)
+        intent.putExtra("UNIQUE_GAME_KEY", gameId)
+        startActivity(intent)
 
-    fun isValueAvailable(snapshot: DataSnapshot, code: String): Boolean{
-        val data = snapshot.children
-        data.forEach{
-            val value = it.value.toString()
-            if(value == code){
-                keyValue = it.key.toString()
-                return true
-            }
-        }
-        return false
+//        createBtn.visibility = View.VISIBLE
+//        joinBtn.visibility = View.VISIBLE
+//        gameCode.visibility = View.VISIBLE
+//        heading.visibility = View.VISIBLE
+//        progressBar.visibility = View.GONE
+//        loading.visibility = View.GONE
     }
 }

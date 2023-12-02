@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "1040859154514",
+    "firebase_url": "https://guesstheera-default-rtdb.firebaseio.com",
     "project_id": "guesstheera",
     "storage_bucket": "guesstheera.appspot.com"
   },
