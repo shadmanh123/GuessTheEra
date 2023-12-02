@@ -41,6 +41,13 @@ android {
 
 dependencies {
 
+    //firebase
+    implementation(platform("com.google.firebase:firebase-bom:32.6.0"))
+    // TODO: add dependencies for firebase projects to be used
+    implementation("com.google.firebase:firebase-storage")
+    // when using BoM, dont specify versions in firebase dependencies
+    // implementation("com.google.firebase:firebase-analytics") for example
+    implementation("com.android.tools.build:gradle:8.1.4")
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.8.0")
