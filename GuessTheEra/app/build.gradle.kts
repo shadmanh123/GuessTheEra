@@ -46,11 +46,11 @@ dependencies {
     // TODO: add dependencies for firebase projects to be used
     implementation("com.google.firebase:firebase-storage")
     implementation("com.google.firebase:firebase-auth")
-    implementation("com.google.firebase:firebase-database:20.3.0")
+    implementation("com.google.firebase:firebase-database")
     implementation ("com.google.android.gms:play-services-auth:20.7.0")
     // when using BoM, dont specify versions in firebase dependencies
     // implementation("com.google.firebase:firebase-analytics") for example
-    implementation("com.android.tools.build:gradle:8.1.4")
+    //implementation("com.android.tools.build:gradle:8.1.4")
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.8.0")

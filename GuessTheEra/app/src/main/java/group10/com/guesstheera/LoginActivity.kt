@@ -1,6 +1,7 @@
 package group10.com.guesstheera
 
 import android.content.Intent
+import android.content.IntentSender
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
@@ -16,6 +17,7 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import androidx.activity.result.contract.ActivityResultContracts
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
+import com.google.android.gms.auth.api.identity.Identity
 import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -26,6 +28,7 @@ var personId: String? = "null"
 class LoginActivity : AppCompatActivity() {
 
     private val RC_SIGN_IN = 1440939901 // You can use any value here
+    private val REQ_ONE_TAP = 2
 
     private lateinit var signInGoogleButton: Button
     private lateinit var signInLocallyButton: Button
@@ -41,6 +44,20 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.login_page)
         auth = Firebase.auth
+
+        oneTapClient = Identity.getSignInClient(this)
+        signInRequest = BeginSignInRequest.builder()
+            .setPasswordRequestOptions(BeginSignInRequest.PasswordRequestOptions.builder()
+                .setSupported(true)
+                .build())
+            .setGoogleIdTokenRequestOptions(
+                BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
+                    .setSupported(true)
+                    .setServerClientId(getString(R.string.web_client_id))
+                    .setFilterByAuthorizedAccounts(true)
+                    .build())
+            .setAutoSelectEnabled(true)
+            .build()
 
 
 //        configureGoogleSignIn()
@@ -69,9 +86,19 @@ class LoginActivity : AppCompatActivity() {
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
     }
     private fun signIn() {
-        val signInIntent = mGoogleSignInClient.signInIntent
-        startActivityForResult(signInIntent, RC_SIGN_IN)
-//        signInLauncher.launch(signInIntent)
+        oneTapClient.beginSignIn(signInRequest)
+            .addOnSuccessListener(this) { result ->
+                try {
+                    startIntentSenderForResult(
+                        result.pendingIntent.intentSender, REQ_ONE_TAP,
+                        null, 0, 0, 0)
+                } catch (e: IntentSender.SendIntentException) {
+                    Log.d("send intent except", "Could not start one-tap UI")
+                }
+            }
+            .addOnFailureListener(this) { e ->
+                Toast.makeText(this, "Sign in failed", Toast.LENGTH_LONG).show()
+            }
     }
 
 //    private val signInLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -82,15 +109,12 @@ class LoginActivity : AppCompatActivity() {
 //            handleSignInResult(task)
 //        }
 //    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        when (requestCode) {
 
-//        if (requestCode == RC_SIGN_IN) {
-//            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-//            handleSignInResult(task)
-//        }
-//        intent = Intent(this, MainActivity::class.java)
-//        startActivity(intent)
+        }
     }
 
     private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
