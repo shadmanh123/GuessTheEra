@@ -24,7 +24,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import group10.com.guesstheera.R
 import group10.com.guesstheera.mainview.MainActivity
-import group10.com.guesstheera.mainview.code
+
 import kotlin.math.absoluteValue
 
 //can only refine the scoring until shad gets the google login to work
@@ -75,7 +75,7 @@ class MultiplayerGameActivity : AppCompatActivity() {
         gameId = intent.getStringExtra("UNIQUE_GAME_KEY").toString()
 
         gameRef = FirebaseDatabase.getInstance().reference.child("games").child(gameId)
-        Log.d("CHECKING GAME KEY", "KEY: $gameId")
+        Log.d("CHECKING GAME KEY", "KEY: $gameId, Mode Selected: $gameIntent")
         if (gameIntent == "Regular"){
             startRegularModeGame(30)
         }
@@ -90,7 +90,7 @@ class MultiplayerGameActivity : AppCompatActivity() {
                     player1Id = snapshot.child("player1").getValue(String::class.java) ?: ""
                     player2Id = snapshot.child("player2").getValue(String::class.java) ?: ""
                     Log.d("Player names:", "Player 1 pix3: $player1Id, Player 2 pix6: $player2Id")
-                    // Ensure player IDs are not empty
+                    //ensure player IDs are not empty, CANNOT CHECK UNTIL USERNAME IS FIXED
                     if (player1Id.isNotEmpty() && player2Id.isNotEmpty()) {
                         // if player1 id is associated with this instance
                         opponentScore = if (player1Id == personId) {
@@ -255,13 +255,13 @@ class MultiplayerGameActivity : AppCompatActivity() {
 
             //if player1 id is associated with this instance
             if (player1Id == personId){
-                gameRef.child(player1Id).child("score").setValue(totalScore)
-                gameRef.child(player1Id).child("stage").setValue(currentIndex)
+                gameRef.child("player1").child("score").setValue(totalScore)
+                gameRef.child("player1").child("stage").setValue(currentIndex)
             }
             //if player2 id is associated with this instance
             else{
-                gameRef.child(player2Id).child("score").setValue(totalScore)
-                gameRef.child(player2Id).child("stage").setValue(currentIndex)
+                gameRef.child("player2").child("score").setValue(totalScore)
+                gameRef.child("player2").child("stage").setValue(currentIndex)
             }
 
 
@@ -276,13 +276,13 @@ class MultiplayerGameActivity : AppCompatActivity() {
             score.text = "Score: $totalScore"
             //if player1 id is associated with this instance
             if (player1Id == personId){
-                gameRef.child(player1Id).child("score").setValue(totalScore)
-                gameRef.child(player1Id).child("stage").setValue(currentIndex)
+                gameRef.child("player1").child("score").setValue(totalScore)
+                gameRef.child("player1").child("stage").setValue(currentIndex)
             }
             //if player2 id is associated with this instance
             else{
-                gameRef.child(player2Id).child("score").setValue(totalScore)
-                gameRef.child(player2Id).child("stage").setValue(currentIndex)
+                gameRef.child("player2").child("score").setValue(totalScore)
+                gameRef.child("player2").child("stage").setValue(currentIndex)
             }
             guess.isEnabled = false
             gameViewModel.timerStop()

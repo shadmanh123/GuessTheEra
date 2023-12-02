@@ -23,7 +23,6 @@ import com.google.firebase.database.FirebaseDatabase
 import group10.com.guesstheera.mainview.GameOptionsFragment.Companion.DIFFICULTY_KEY
 import group10.com.guesstheera.mainview.LeaderboardFragment
 import group10.com.guesstheera.mainview.MainActivity
-import group10.com.guesstheera.mainview.code
 import kotlin.math.absoluteValue
 import kotlin.time.times
 
