@@ -34,13 +34,30 @@
         android:textColor="#000000"
         android:textSize="24sp" />
 
-    <Button
-        android:id="@+id/buttonPlayAgain"
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="25dp" />
+
+    <TextView
+        android:id="@+id/winner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Play Again"
-        android:backgroundTint="@color/yinmin_blue"
-        android:textColor="@color/white"/>
+        android:layout_gravity="center"
+        android:text="The Winner is..."
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/winnerUID"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="UID"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textSize="24sp"
+        android:textStyle="bold" />
 
     <Button
         android:id="@+id/buttonLeaderboard"

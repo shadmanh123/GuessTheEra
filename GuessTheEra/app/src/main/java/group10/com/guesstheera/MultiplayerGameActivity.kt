@@ -55,6 +55,7 @@ class MultiplayerGameActivity : AppCompatActivity() {
     private var opponentScore = 0
     private lateinit var opponentTotalScore: TextView
     private var gameId = ""
+    private var winner = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -106,8 +107,22 @@ class MultiplayerGameActivity : AppCompatActivity() {
                         player2Stage = snapshot.child(player2Id).child("stage").getValue(Int::class.java) ?: 0
 
                         if (player1Stage == 5 && player2Stage == 5) {
-                            // Both players have finished the game
-                            // Proceed to compare scores and decide the winner
+                            val p1Score = snapshot.child("player1").child("score").getValue(Int::class.java) ?: 0
+                            val p2Score = snapshot.child("player1").child("score").getValue(Int::class.java) ?: 0
+                             // if score the same, show as tie
+                            if (p1Score > p2Score) {
+                                winner = snapshot.child("player1").child("UID").getValue(String::class.java) ?: ""
+                                gameRef.child("winner").setValue(winner)
+                            }
+                            else if (p1Score < p2Score) {
+                                winner = snapshot.child("player2").child("UID").getValue(String::class.java) ?: ""
+                                gameRef.child("winner").setValue(winner)
+                            }
+                            else{
+                                winner = "tie"
+                                gameRef.child("winner").setValue(winner)
+                            }
+                            showGameFinishedDialog(this@MultiplayerGameActivity, winner)
                         }
                     }
                 }
@@ -294,7 +309,7 @@ class MultiplayerGameActivity : AppCompatActivity() {
             guess.isEnabled = false
             gameViewModel.timerStop()
             //show dialog that game is ended with final score, ability to go to leaderboard or play another game
-            showGameFinishedDialog(this)
+            showWaitingDialog(this@MultiplayerGameActivity)
         }
     }
 
@@ -401,21 +416,24 @@ class MultiplayerGameActivity : AppCompatActivity() {
 
             guess.isEnabled = false
             gameViewModel.timerStop()
-            showGameFinishedDialog(this)
+            showWaitingDialog(this@MultiplayerGameActivity)
         }
     }
 
     //dialog created upon finishing the game or running out of time
-    private fun showGameFinishedDialog(activity: Activity?) {
+    private fun showGameFinishedDialog(activity: Activity?, winner: String) {
         val dialogView = LayoutInflater.from(activity).inflate(R.layout.multiplayer_game_finish_dialog, null)
         val dialog = AlertDialog.Builder(activity)
             .setView(dialogView)
             .create()
         val finalScore: TextView = dialogView.findViewById(R.id.finalScore)
+        val opponentFinalScore: TextView = dialogView.findViewById(R.id.opponentFinalScore)
         val showLeaderboard: Button = dialogView.findViewById(R.id.buttonLeaderboard)
+        val showWinner: TextView = dialogView.findViewById(R.id.winnerUID)
 
         finalScore.text = "Score: $totalScore"
-
+        opponentFinalScore.text = "Opponent Final Score: $opponentScore"
+        showWinner.text = "$winner"
 
         showLeaderboard.setOnClickListener {
             dialog.dismiss()
@@ -424,6 +442,19 @@ class MultiplayerGameActivity : AppCompatActivity() {
         }
 
         // Display the custom dialog
+        dialog.show()
+    }
+
+    private fun showWaitingDialog(activity: Activity?) {
+        val dialogView = LayoutInflater.from(activity).inflate(R.layout.multiplayer_game_waiting_dialog, null)
+        val dialog = AlertDialog.Builder(activity)
+            .setView(dialogView)
+            .create()
+        val finalScore: TextView = dialogView.findViewById(R.id.finalScore)
+
+        finalScore.text = "Score: $totalScore"
+
+        //display the custom dialog
         dialog.show()
     }
 
