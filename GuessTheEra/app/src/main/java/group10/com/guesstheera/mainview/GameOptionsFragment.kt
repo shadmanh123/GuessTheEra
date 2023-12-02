@@ -11,10 +11,10 @@ import androidx.fragment.app.Fragment
 import group10.com.guesstheera.DifficultyUtil
 import group10.com.guesstheera.R
 import group10.com.guesstheera.GameActivity
-import group10.com.guesstheera.databinding.FragmentGameOptionsBinding
+import group10.com.guesstheera.databinding.SingleplayerFragmentGameOptionsBinding
 
 class GameOptionsFragment: Fragment() {
-    private var _binding: FragmentGameOptionsBinding? = null
+    private var _binding: SingleplayerFragmentGameOptionsBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -30,7 +30,7 @@ class GameOptionsFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        _binding = FragmentGameOptionsBinding.inflate(inflater, container, false)
+        _binding = SingleplayerFragmentGameOptionsBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
         regularModeButton = root.findViewById(R.id.option_regular_mode)

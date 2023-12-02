@@ -51,6 +51,7 @@
         android:layout_marginTop="20dp"
         android:backgroundTint="@color/yinmin_blue"
         android:text="Create"
+        android:background="@drawable/rounded_button_blue"
         android:textAllCaps="false"
         android:textColor="@color/white" />
 
@@ -63,6 +64,7 @@
         android:layout_marginTop="20dp"
         android:backgroundTint="@color/yinmin_blue"
         android:text="Join"
+        android:background="@drawable/rounded_button_blue"
         android:textAllCaps="false"
         android:textColor="@color/white" />
 

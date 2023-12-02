@@ -16,7 +16,7 @@
         android:id="@+id/nav_game_options_multiplayer"
         android:name="group10.com.guesstheera.mainview.MultiplayerGameOptionsFragment"
         android:label="Game Options"
-        tools:layout="@layout/fragment_game_options" />
+        tools:layout="@layout/singleplayer_fragment_game_options" />
 
     <fragment
         android:id="@+id/nav_game_options"
