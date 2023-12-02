@@ -38,6 +38,7 @@
             android:id="@+id/btnSet"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:background="@drawable/rounded_button_blue"
             android:layout_weight="1"
             android:text="@string/set"
             android:textColor="@android:color/white" />
@@ -51,6 +52,7 @@
             android:id="@+id/btnCancel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:background="@drawable/rounded_button_blue"
             android:layout_weight="1"
             android:text="@string/cancel"
             android:textColor="@android:color/white" />

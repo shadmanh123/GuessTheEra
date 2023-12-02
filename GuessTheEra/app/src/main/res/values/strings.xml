@@ -36,4 +36,6 @@
     <string name="by_the_decade">Regular (By Decade)</string>
     <string name="earliest_year_picker">Earliest Year Picker:</string>
     <string name="latest_year_picker">Latest Year Picker:</string>
+    <string name="web_client_id">1040859154514-dck784ebu5vuku3s98io3ljou563mevd.apps.googleusercontent.com</string>
+    <string name="sign_out">Sign Out</string>
 </resources>

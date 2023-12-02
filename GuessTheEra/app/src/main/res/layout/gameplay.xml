@@ -35,8 +35,9 @@
         android:layout_below="@id/image"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="15dp"
-        android:layout_marginBottom="15dp"
+        android:layout_marginBottom="30dp"
         android:text="Lock in Guess"
+        android:background="@drawable/rounded_button_blue"
         android:textColor="@color/white" />
 
     <group10.com.guesstheera.CustomSeekBar

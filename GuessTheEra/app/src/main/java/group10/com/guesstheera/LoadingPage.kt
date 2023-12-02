@@ -9,6 +9,10 @@ import android.os.Bundle
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
+import group10.com.guesstheera.mainview.MainActivity
 
 class LoadingPage: AppCompatActivity()  {
     private lateinit var gameTitleTV: TextView
@@ -16,15 +20,25 @@ class LoadingPage: AppCompatActivity()  {
     private lateinit var fadeInAnimation: ObjectAnimator
     private lateinit var fadeOutAnimation: ObjectAnimator
     private lateinit var animatorSet: AnimatorSet
+    private lateinit var auth: FirebaseAuth
+    private var isSignedIn: Boolean = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.loading_page)
         gameTitleTV = findViewById(R.id.gameTitleTV)
+        auth = Firebase.auth
+        isSignedIn()
         createFadeInAnimation()
         createFadeOutAnimation()
         createAnimation()
     }
 
+    private fun isSignedIn() {
+        val currentUser = auth.currentUser
+        if (currentUser != null) {
+            isSignedIn = true
+        }
+    }
     private fun createAnimation() {
         animatorSet = AnimatorSet()
         animatorSet.playSequentially(fadeInAnimation, fadeOutAnimation)
@@ -32,8 +46,15 @@ class LoadingPage: AppCompatActivity()  {
         animatorSet.addListener(object : AnimatorListenerAdapter() {
             override fun onAnimationEnd(animation: Animator) {
                 super.onAnimationEnd(animation)
-                intent = Intent(this@LoadingPage, LoginActivity::class.java)
-                startActivity(intent)
+                if (!isSignedIn) {
+                    intent = Intent(this@LoadingPage, LoginActivity::class.java)
+                    startActivity(intent)
+                }
+                else {
+                    intent = Intent(this@LoadingPage, MainActivity::class.java)
+                    intent.putExtra("isAuth", true)
+                    startActivity(intent)
+                }
                 // Finish the LoadingPage activity if you want
 //                finish()
             }
