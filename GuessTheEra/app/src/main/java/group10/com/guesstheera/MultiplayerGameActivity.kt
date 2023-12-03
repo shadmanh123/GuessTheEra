@@ -15,6 +15,8 @@ import android.widget.SeekBar
 import android.widget.TextClock
 import android.widget.TextView
 import android.widget.Toast
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.firebase.database.DataSnapshot
@@ -403,7 +405,6 @@ class MultiplayerGameActivity : AppCompatActivity() {
             score.text = "Score: $totalScore"
             //if player1 id is associated with this instance
             if (player1Id == personId){
-                gameRef.child("player1").child("score").setValue(totalScore)
                 gameRef.child("player1").child("stage").setValue(currentIndex)
                 gameRef.child("player1").child("UID").setValue(player1Id)
             }
@@ -466,4 +467,28 @@ class MultiplayerGameActivity : AppCompatActivity() {
         }
         startActivity(intent)
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        //adding functionality to set player stage to 5 if they exit game
+        if (player1Id == personId){
+            gameRef.child("player1").child("score").setValue(5)
+        }
+        else{
+            gameRef.child("player2").child("score").setValue(5)
+        }
+
+    }
+
+    override fun onStop() {
+        super.onStop()
+        //adding functionality to set player stage to 5 if they exit game
+        if (player1Id == personId){
+            gameRef.child("player1").child("score").setValue(5)
+        }
+        else{
+            gameRef.child("player2").child("score").setValue(5)
+        }
+    }
+
 }
