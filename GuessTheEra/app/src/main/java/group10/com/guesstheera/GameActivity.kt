@@ -2,7 +2,6 @@ package group10.com.guesstheera
 
 import android.app.Activity
 import android.app.AlertDialog
-import android.app.Dialog
 import android.content.Intent
 import android.graphics.ColorMatrix
 import android.graphics.ColorMatrixColorFilter
@@ -15,16 +14,11 @@ import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat.recreate
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.google.firebase.database.FirebaseDatabase
-import group10.com.guesstheera.mainview.GameOptionsFragment.Companion.DIFFICULTY_KEY
-import group10.com.guesstheera.mainview.LeaderboardFragment
+import group10.com.guesstheera.backend.ScoreRepository
 import group10.com.guesstheera.mainview.MainActivity
 import kotlin.math.absoluteValue
-import kotlin.time.times
 
 class GameActivity : AppCompatActivity() {
 
@@ -269,7 +263,7 @@ class GameActivity : AppCompatActivity() {
             guess.isEnabled = false
             gameViewModel.timerStop()
             //show dialog that game is ended with final score, ability to go to leaderboard or play another game
-            showGameFinishedDialog(this)
+            onGameFinished(this)
         }
     }
 
@@ -363,12 +357,18 @@ class GameActivity : AppCompatActivity() {
             //maybe create intent for new fragment or activity showing score
             guess.isEnabled = false
             gameViewModel.timerStop()
-            showGameFinishedDialog(this)
+            onGameFinished(this)
         }
     }
 
     //dialog created upon finishing the game or running out of time
-    private fun showGameFinishedDialog(activity: Activity?) {
+    //also game score is updated
+    private fun onGameFinished(activity: Activity?) {
+        val repository = ScoreRepository()
+        // TODO: make view model factory to construct view model with
+        //val viewModel = ViewModelProvider(this)[ScoreViewModel::class.java]
+        //viewModel.updateOwnScore(totalScore)
+
         val dialogView = LayoutInflater.from(activity).inflate(R.layout.game_finish_dialog, null)
         val dialog = AlertDialog.Builder(activity)
             .setView(dialogView)

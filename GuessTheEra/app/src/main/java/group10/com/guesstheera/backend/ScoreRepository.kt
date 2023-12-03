@@ -1,27 +1,32 @@
 package group10.com.guesstheera.backend
 
 import android.util.Log
-import androidx.lifecycle.ViewModel
-import com.google.android.material.color.utilities.Score
+import com.google.android.gms.tasks.OnFailureListener
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 
 class ScoreRepository {
     private val database = FirebaseFirestore.getInstance()
     private val singlePlayerScoresCollection = database.collection("singleplayer_scores")
-    fun addScore(playerName: String, score: Int, callback: (Boolean) -> Unit){
-        val scoreData = hashMapOf(
-            "playerName" to playerName,
-            "score" to score
-        )
 
-        singlePlayerScoresCollection.add(scoreData).addOnSuccessListener {
-            callback.invoke(true)
-        }
-            .addOnFailureListener{e ->
-                Log.w("Score Repository", "Error adding score", e)
-                callback.invoke(false)
+    private var ownScoreDocumentReference: DocumentReference? = null
+    private val ownScoreListeners: MutableList<OwnScoreListener> = mutableListOf()
+    init {
+        val user = FirebaseAuth.getInstance().currentUser
+        val userId = user?.uid // This is the user's unique ID in Firebase
+        if(userId != null){
+            getPlayerScore(userId){
+                ownScoreDocumentReference = it
+                onUpdateOwnDocumentReference()
             }
+        }
+    }
+
+    companion object{
+        const val userIdKey = "user_id"
+        const val scoreKey = "score"
     }
 
     fun getLeaderBoardScores(limit: Long,callback: (List<Score>) -> Unit ){
@@ -36,4 +41,71 @@ class ScoreRepository {
             }
     }
 
+    fun getPlayerScore(userId: String, callback:(DocumentReference?) -> Unit) {
+        singlePlayerScoresCollection.whereEqualTo(userIdKey, userId).get()
+            .addOnSuccessListener {
+                snapshot ->
+                if(snapshot.size() == 1) {
+                    val documentId = snapshot.documents[0].id
+                    callback.invoke(singlePlayerScoresCollection.document(documentId))
+                }
+            }
+            .addOnFailureListener{e ->
+                Log.w("Score Repository", "Error getting player score", e)
+                callback.invoke(null)
+            }
+    }
+
+
+    // own record read-only helpers
+
+    private fun onUpdateOwnDocumentReference(){
+        for(listener in ownScoreListeners){
+            ownScoreDocumentReference?.addSnapshotListener{
+                    snapshot, _ ->
+                listener.onUpdate(snapshot?.toObject(Score::class.java))
+            }
+        }
+    }
+
+    fun addOwnScoreListener(listener: OwnScoreListener){
+        ownScoreListeners.plus(listener)
+        ownScoreDocumentReference?.addSnapshotListener{
+            snapshot, _ ->
+            listener.onUpdate(snapshot?.toObject(Score::class.java))
+        }
+    }
+
+
+    // own record write-only helpers
+    fun updateOwnScore(score: Int, onFailureListener: OnFailureListener){
+        if(ownScoreDocumentReference == null){
+            val user = FirebaseAuth.getInstance().currentUser
+            val userId = user?.uid ?: return
+            val scoreRecord = hashMapOf(
+                userIdKey to userId,
+                scoreKey to score
+            )
+            singlePlayerScoresCollection.add(scoreRecord).addOnSuccessListener {
+                ownScoreDocumentReference = it
+                onUpdateOwnDocumentReference()
+            }.addOnFailureListener(onFailureListener)
+        }
+        else{
+            ownScoreDocumentReference!!.get().addOnSuccessListener {
+                snapshot ->
+                val scoreRecord = hashMapOf(
+                    userIdKey to snapshot[userIdKey],
+                    // random auto-suggestion
+                    scoreKey to score.coerceAtLeast(snapshot[scoreKey] as Int)
+                )
+                ownScoreDocumentReference!!.update(scoreRecord)
+                    .addOnFailureListener(onFailureListener)
+            }.addOnFailureListener(onFailureListener)
+        }
+    }
+}
+
+interface OwnScoreListener{
+    fun onUpdate(score: Score?)
 }
