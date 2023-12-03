@@ -118,7 +118,7 @@ class MultiplayerGameActivity : AppCompatActivity() {
         //set grayscale for custom mode
 
         //set the current image
-        image.setImageResource(gameViewModel.gameList.first())
+        image.setImageBitmap(gameViewModel.gameList.first())
 
         //call helper function when player guesses or they run out of time
         guess.setOnClickListener {
@@ -156,7 +156,7 @@ class MultiplayerGameActivity : AppCompatActivity() {
         slider.max = 120
         slider.progress = 60
 
-        image.setImageResource(gameViewModel.gameList.first())
+        image.setImageBitmap(gameViewModel.gameList.first())
 
         guess.setOnClickListener {
             updateUIOnGuessHard(time)
@@ -260,7 +260,7 @@ class MultiplayerGameActivity : AppCompatActivity() {
 
 
             //iterate list and set slider for next image
-            image.setImageResource(gameViewModel.gameList[currentIndex])
+            image.setImageBitmap(gameViewModel.gameList[currentIndex])
 
             gameViewModel.startTimer(time)
             currentIndex++
@@ -364,7 +364,7 @@ class MultiplayerGameActivity : AppCompatActivity() {
                 gameRef.child(player2Id).child("stage").setValue(currentIndex)
             }
 
-            image.setImageResource(gameViewModel.gameList[currentIndex])
+            image.setImageBitmap(gameViewModel.gameList[currentIndex])
 
             gameViewModel.startTimer(time)
             currentIndex++

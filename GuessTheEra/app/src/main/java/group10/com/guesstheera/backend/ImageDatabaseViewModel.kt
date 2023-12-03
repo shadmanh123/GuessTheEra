@@ -27,7 +27,8 @@ class ImageDatabaseViewModel(application: Application): AndroidViewModel(applica
      * update the live filepaths list for the subset -> to be used to determine the year the photo was taken
      */
     private fun downloadImagesForGame(imageList: List<String>, seed: Long) {
-        val shuffledImageFilePathList = imageList.shuffled(Random(seed))
+        //val shuffledImageFilePathList = imageList.shuffled(Random(seed))
+        val shuffledImageFilePathList = imageList.shuffled()
         val gameImageFilePathList = shuffledImageFilePathList.take(5)
         updateImageFilePathsList(gameImageFilePathList)
 
@@ -38,9 +39,9 @@ class ImageDatabaseViewModel(application: Application): AndroidViewModel(applica
         for (filepath in gameImageFilePathList) {
             val imageRef = storageRef.child(filepath)
             imageRef.getBytes(ONE_MB).addOnSuccessListener {
-                //Log.d("debug: getting image from storage bucket", it.toString())
+                Log.d("debug: getting image from storage bucket", it.toString())
                 images.add(it)
-                //Log.d("debug: images list size inside", images.size.toString())
+                Log.d("debug: images list size inside", images.size.toString())
                 if (images.size == gameImageFilePathList.size) {
                     updateImageArrayList(images)
                 }

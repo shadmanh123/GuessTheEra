@@ -7,6 +7,7 @@ import android.content.Intent
 import android.graphics.ColorMatrix
 import android.graphics.ColorMatrixColorFilter
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.widget.Button
@@ -20,6 +21,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.firebase.database.FirebaseDatabase
+import group10.com.guesstheera.backend.FirebaseApplication
 import group10.com.guesstheera.mainview.GameOptionsFragment.Companion.DIFFICULTY_KEY
 import group10.com.guesstheera.mainview.LeaderboardFragment
 import group10.com.guesstheera.mainview.MainActivity
@@ -110,7 +112,7 @@ class GameActivity : AppCompatActivity() {
             image.colorFilter = filter
         }
         //set the current image
-        image.setImageResource(gameViewModel.gameList.first())
+        image.setImageBitmap(gameViewModel.gameList.first())
 
         //call helper function when player guesses or they run out of time
         guess.setOnClickListener {
@@ -157,7 +159,7 @@ class GameActivity : AppCompatActivity() {
             val filter = ColorMatrixColorFilter(colorMatrix)
             image.colorFilter = filter
         }
-        image.setImageResource(gameViewModel.gameList.first())
+        image.setImageBitmap(gameViewModel.gameList.first())
 
         guess.setOnClickListener {
             updateUIOnGuessHard(time)
@@ -258,7 +260,7 @@ class GameActivity : AppCompatActivity() {
                 val filter = ColorMatrixColorFilter(colorMatrix)
                 image.colorFilter = filter
             }
-            image.setImageResource(gameViewModel.gameList[currentIndex])
+            image.setImageBitmap(gameViewModel.gameList[currentIndex])
 
             gameViewModel.startTimer(time)
             currentIndex++
@@ -352,7 +354,7 @@ class GameActivity : AppCompatActivity() {
                 image.colorFilter = filter
             }
 
-            image.setImageResource(gameViewModel.gameList[currentIndex])
+            image.setImageBitmap(gameViewModel.gameList[currentIndex])
 
             gameViewModel.startTimer(time)
             currentIndex++
@@ -384,8 +386,13 @@ class GameActivity : AppCompatActivity() {
             dialog.dismiss()
             //restart the GameActivity
             //reset view model images
-            gameViewModel.resetGameImageList()
-            this@GameActivity.recreate()
+            FirebaseApplication.imageDatabaseViewModel.startDownloadProcess()
+            val handler = Handler()
+            handler.postDelayed({
+                gameViewModel.resetGameImageList()
+                this@GameActivity.recreate()
+            }, 1000)
+            //this@GameActivity.recreate()
         }
 
         showLeaderboard.setOnClickListener {

@@ -1,5 +1,7 @@
 package group10.com.guesstheera
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Handler
 import android.os.Looper
 import androidx.lifecycle.LiveData
@@ -12,11 +14,10 @@ import group10.com.guesstheera.backend.ImageDatabaseViewModel
 class GameViewModel : ViewModel() {
 
     private val _counter = MutableLiveData<Int>()
-    val counter: LiveData<Int> get() = _counter
-    var gameList: List<Int> = listOf(0,0,0,0,0)
-    private var imageGameMap: Map<Int, String> = mapOf()
-    var yearList: List<String> = listOf()
-    private val imageList = listOf(
+
+    //private var imageGameMap: Map<Int, String> = mapOf()
+    //var yearList: List<String> = listOf()
+    /*private val imageList = listOf(
         R.drawable.p_1907,
         R.drawable.p_1909,
         R.drawable.p_1910,
@@ -79,24 +80,55 @@ class GameViewModel : ViewModel() {
         R.drawable.p_2012 to "2012",
         R.drawable.p_2013 to "2013",
         R.drawable.p_2014 to "2014"
-    )
-    private var imageArrayList: ArrayList<ByteArray>? = ArrayList()
+    )*/
+    var imageArrayList: ArrayList<ByteArray>? = ArrayList()
+    var imageFilePaths: List<String>? = listOf()
     private val imageDatabaseViewModel = FirebaseApplication.imageDatabaseViewModel
+    val counter: LiveData<Int> get() = _counter
+    var gameList: MutableList<Bitmap> = mutableListOf()
+    var yearList: MutableList<String> = mutableListOf()
 
 
     init {
-        gameList = getRandomSubList(imageList, 5)
+        /*gameList = getRandomSubList(imageList, 5)
         imageGameMap = createImageNamesMap(gameList)
-        yearList = imageGameMap.values.toList()
+        yearList = imageGameMap.values.toList()*/
         imageArrayList = imageDatabaseViewModel.imageArray.value
+        imageFilePaths = imageDatabaseViewModel.imageFilePathsList.value
+        convertFilePathsToYear()
+        convertImageByteArrayToBitMap()
+        FirebaseApplication.imageDatabaseViewModel.startDownloadProcess()
     }
 
-    // Function to get a random sublist of 5 for now
-    private fun getRandomSubList(list: List<Int>, size: Int): List<Int> {
-        return list.shuffled().take(size)
+    private fun convertFilePathsToYear() {
+        if (imageFilePaths!=null) {
+            for (i in imageFilePaths!!.indices) {
+                val tokens: List<String> = imageFilePaths!![i].split("_")
+                for (token in tokens) {
+                    val yearExtension: List<String> = token.split(".")
+                    yearList.add(i, yearExtension[0])
+                }
+            }
+        }
     }
+
+    private fun convertImageByteArrayToBitMap() {
+        if (imageArrayList!=null) {
+            for ((index, image) in imageArrayList!!.withIndex()) {
+                val bitmap: Bitmap = BitmapFactory.decodeByteArray(image, 0, image.size)
+                gameList.add(index, bitmap)
+            }
+        }
+
+    }
+    // Function to get a random sublist of 5 for now
+    //TODO: remove, already done
+    /*private fun getRandomSubList(list: List<Int>, size: Int): List<Int> {
+        return list.shuffled().take(size)
+    }*/
     //chatGPT assisted with creating random list of 5 and a mapper to get the strings https://chat.openai.com/share/47bb1f9b-e3b0-455c-b52d-9c6c2224154d
-    private fun createImageNamesMap(selectedList: List<Int>): Map<Int, String> {
+    //TODO: remove, already done
+    /*private fun createImageNamesMap(selectedList: List<Int>): Map<Int, String> {
         val map = mutableMapOf<Int, String>()
         for (imageId in selectedList) {
             imageYearMap[imageId]?.let { name ->
@@ -104,7 +136,7 @@ class GameViewModel : ViewModel() {
             }
         }
         return map
-    }
+    }*/
 
     //created handler and timer functions with the help of ThreadExampleKotlin
     private var timerHandler: Handler? = null
@@ -120,9 +152,10 @@ class GameViewModel : ViewModel() {
 
         }
     }
-
+    //TODO: change to reference image datbase viewmodel function that does the same thing
     fun resetGameImageList(){
-        gameList = getRandomSubList(imageList, 5)
+        imageArrayList = imageDatabaseViewModel.imageArray.value
+        imageFilePaths = imageDatabaseViewModel.imageFilePathsList.value
     }
     fun startTimer(time: Int) {
         // Initialize the handler if not already done

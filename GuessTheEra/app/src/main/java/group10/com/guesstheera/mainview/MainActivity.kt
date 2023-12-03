@@ -12,6 +12,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
 import group10.com.guesstheera.R
+import group10.com.guesstheera.backend.FirebaseApplication
 import group10.com.guesstheera.backend.ImageDatabaseViewModel
 import group10.com.guesstheera.databinding.ActivityMainBinding
 
@@ -29,10 +30,11 @@ class MainActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.appBarMain.toolbar)
 
-        imageDatabaseViewModel = ViewModelProvider(this,
-            ViewModelProvider.AndroidViewModelFactory(application))[ImageDatabaseViewModel::class.java]
+        /*imageDatabaseViewModel = ViewModelProvider(this,
+            ViewModelProvider.AndroidViewModelFactory(application))[ImageDatabaseViewModel::class.java]*/
 
-        imageDatabaseViewModel.startDownloadProcess()
+
+        FirebaseApplication.imageDatabaseViewModel.startDownloadProcess()
         /*//floating mail button listener
         binding.appBarMain.fab.setOnClickListener {
             view ->
