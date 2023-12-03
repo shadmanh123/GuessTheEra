@@ -14,7 +14,7 @@ class ScoreViewModel(private val difficulty:String,
     private val _topScores = MutableLiveData<List<Score>>()
     val topScores: LiveData<List<Score>> get() = _topScores
 
-    fun loadScore(limit: Long){
+    fun loadScore(limit: Int){
         repository.getLeaderBoardScores(difficulty, limit){
             scores -> _topScores.postValue(scores)
         }
