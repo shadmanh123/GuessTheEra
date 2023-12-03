@@ -398,11 +398,6 @@ class MultiplayerGameActivity : AppCompatActivity() {
 
     //dialog created upon finishing the game or running out of time
     private fun onGameFinished(activity: Activity?) {
-        val repository = ScoreRepository()
-        val viewModelFactory = ScoreViewModelFactory(gameIntent, repository)
-        val viewModel = ViewModelProvider(this, viewModelFactory)[ScoreViewModel::class.java]
-        viewModel.updateOwnScore(totalScore > opponentScore)
-        
         val dialogView = LayoutInflater.from(activity).inflate(R.layout.multiplayer_game_finish_dialog, null)
         val dialog = AlertDialog.Builder(activity)
             .setView(dialogView)
