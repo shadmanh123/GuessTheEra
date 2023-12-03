@@ -472,10 +472,10 @@ class MultiplayerGameActivity : AppCompatActivity() {
         super.onDestroy()
         //adding functionality to set player stage to 5 if they exit game
         if (player1Id == personId){
-            gameRef.child("player1").child("score").setValue(5)
+            gameRef.child("player1").child("stage").setValue(5)
         }
         else{
-            gameRef.child("player2").child("score").setValue(5)
+            gameRef.child("player2").child("stage").setValue(5)
         }
 
     }
@@ -484,10 +484,10 @@ class MultiplayerGameActivity : AppCompatActivity() {
         super.onStop()
         //adding functionality to set player stage to 5 if they exit game
         if (player1Id == personId){
-            gameRef.child("player1").child("score").setValue(5)
+            gameRef.child("player1").child("stage").setValue(5)
         }
         else{
-            gameRef.child("player2").child("score").setValue(5)
+            gameRef.child("player2").child("stage").setValue(5)
         }
     }
 
