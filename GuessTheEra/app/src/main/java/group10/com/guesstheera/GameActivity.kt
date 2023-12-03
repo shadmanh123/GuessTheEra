@@ -371,9 +371,7 @@ class GameActivity : AppCompatActivity() {
         val finalScore: TextView = dialogView.findViewById(R.id.finalScore)
         val playAgain: Button = dialogView.findViewById(R.id.buttonPlayAgain)
         val showLeaderboard: Button = dialogView.findViewById(R.id.buttonLeaderboard)
-        loadHighScore()
-
-
+        updateHighScore(totalScore)
         finalScore.text = "Score: $totalScore"
         // Set up the button click listeners
         playAgain.setOnClickListener {
@@ -394,9 +392,15 @@ class GameActivity : AppCompatActivity() {
         dialog.show()
     }
 
-    private fun loadHighScore() {
+    private fun updateHighScore(totalScore: Int) {
         highScoreStored = getSharedPreferences("HighScore", MODE_PRIVATE)
+        val currentHighScore = highScoreStored.getInt("highScore", 0)
 
+        if (totalScore > currentHighScore){
+            val editor = highScoreStored.edit()
+            editor.putInt("highScore", totalScore)
+            editor.apply()
+        }
     }
 
     private fun routeToLeaderboardFragment() {
