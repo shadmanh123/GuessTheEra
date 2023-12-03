@@ -79,6 +79,7 @@ class OnlineGameStartActivity : AppCompatActivity() {
         }
 
         createBtn.setOnClickListener {
+            loading.text = "Waiting For Player to Join Match"
             createBtn.visibility = View.GONE
             joinBtn.visibility = View.GONE
             //gameCode.visibility = View.GONE
@@ -135,7 +136,7 @@ class OnlineGameStartActivity : AppCompatActivity() {
         }
 
         joinBtn.setOnClickListener {
-
+            loading.text = "Searching for an open Match..."
             createBtn.visibility = View.GONE
             joinBtn.visibility = View.GONE
             //gameCode.visibility = View.VISIBLE
