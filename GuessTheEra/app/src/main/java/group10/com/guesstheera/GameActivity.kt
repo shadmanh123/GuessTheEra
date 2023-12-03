@@ -2,8 +2,8 @@ package group10.com.guesstheera
 
 import android.app.Activity
 import android.app.AlertDialog
-import android.app.Dialog
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.ColorMatrix
 import android.graphics.ColorMatrixColorFilter
 import android.os.Bundle
@@ -15,16 +15,10 @@ import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat.recreate
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.google.firebase.database.FirebaseDatabase
-import group10.com.guesstheera.mainview.GameOptionsFragment.Companion.DIFFICULTY_KEY
-import group10.com.guesstheera.mainview.LeaderboardFragment
 import group10.com.guesstheera.mainview.MainActivity
 import kotlin.math.absoluteValue
-import kotlin.time.times
 
 class GameActivity : AppCompatActivity() {
 
@@ -35,6 +29,7 @@ class GameActivity : AppCompatActivity() {
     private lateinit var image: ImageView
     private lateinit var guess: Button
     private lateinit var score: TextView
+    private lateinit var highScoreStored: SharedPreferences
 
     //will need to be set by intent from
     private var gameIntent = ""
@@ -376,6 +371,8 @@ class GameActivity : AppCompatActivity() {
         val finalScore: TextView = dialogView.findViewById(R.id.finalScore)
         val playAgain: Button = dialogView.findViewById(R.id.buttonPlayAgain)
         val showLeaderboard: Button = dialogView.findViewById(R.id.buttonLeaderboard)
+        loadHighScore()
+
 
         finalScore.text = "Score: $totalScore"
         // Set up the button click listeners
@@ -395,6 +392,11 @@ class GameActivity : AppCompatActivity() {
 
         // Display the custom dialog
         dialog.show()
+    }
+
+    private fun loadHighScore() {
+        highScoreStored = getSharedPreferences("HighScore", MODE_PRIVATE)
+
     }
 
     private fun routeToLeaderboardFragment() {
