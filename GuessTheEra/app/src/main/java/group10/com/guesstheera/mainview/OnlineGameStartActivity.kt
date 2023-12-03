@@ -33,12 +33,12 @@ class OnlineGameStartActivity : AppCompatActivity() {
     private lateinit var createBtn: Button
     private lateinit var joinBtn: Button
     private lateinit var progressBar: ProgressBar
+    private lateinit var cancelActivity: Button
     private var gameId = ""
     private var codeFound = false
 
     private var gameIntent = ""
-    //TODO must have a look at creating a cancel button for hosters, called onDestroy and resets UI
-    //TODO also need to check if user has signed into google, should be done here in OnCreate, maybe disable buttons
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_online_game_start)
@@ -49,6 +49,7 @@ class OnlineGameStartActivity : AppCompatActivity() {
         progressBar = findViewById(R.id.idPBLoading)
         loading = findViewById(R.id.loadingText)
         cancelBtn = findViewById(R.id.cancelHost)
+        cancelActivity = findViewById(R.id.cancelActivity)
 
         gameIntent = intent.getStringExtra(GameActivity.DIFFICULTY_KEY).toString()
         heading.text = "$gameIntent Mode"
@@ -64,6 +65,18 @@ class OnlineGameStartActivity : AppCompatActivity() {
             Log.d("USER ID", "No user is currently logged in, setting user as guest")
         }
 
+        if (personId == "Guest"){
+            createBtn.isEnabled = false
+            joinBtn.isEnabled = false
+            createBtn.visibility = View.GONE
+            joinBtn.visibility = View.GONE
+            cancelActivity.visibility = View.VISIBLE
+            Toast.makeText(this, "Login to Your Google Account to Play Online", Toast.LENGTH_LONG).show()
+        }
+
+        cancelActivity.setOnClickListener{
+            finish()
+        }
 
         createBtn.setOnClickListener {
             createBtn.visibility = View.GONE

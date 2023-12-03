@@ -103,13 +103,14 @@ class MultiplayerGameActivity : AppCompatActivity() {
                         }
                         opponentTotalScore.text = "Opponent Score: $opponentScore"
 
-                        player1Stage = snapshot.child(player1Id).child("stage").getValue(Int::class.java) ?: 0
-                        player2Stage = snapshot.child(player2Id).child("stage").getValue(Int::class.java) ?: 0
-
+                        player1Stage = snapshot.child("player1").child("stage").getValue(Int::class.java) ?: 0
+                        player2Stage = snapshot.child("player2").child("stage").getValue(Int::class.java) ?: 0
+                        Log.d("STAGE OF PLAYER", "P1 Stage: $player1Stage, P2 Stage: $player2Stage")
                         if (player1Stage == 5 && player2Stage == 5) {
                             val p1Score = snapshot.child("player1").child("score").getValue(Int::class.java) ?: 0
-                            val p2Score = snapshot.child("player1").child("score").getValue(Int::class.java) ?: 0
-                             // if score the same, show as tie
+                            val p2Score = snapshot.child("player2").child("score").getValue(Int::class.java) ?: 0
+                            Log.d("STAGE OF PLAYER", "P1 Score: $p1Score, P2 Score: $p2Score")
+                            //if score the same, show as tie
                             if (p1Score > p2Score) {
                                 winner = snapshot.child("player1").child("UID").getValue(String::class.java) ?: ""
                                 gameRef.child("winner").setValue(winner)
