@@ -55,11 +55,11 @@ class OnlineGameStartActivity : AppCompatActivity() {
         heading.text = "$gameIntent Mode"
 
         val user = FirebaseAuth.getInstance().currentUser
-        val userId = user?.uid // This is the user's unique ID in Firebase
+        val userEmail = user?.email // This is the user's unique ID in Firebase
 
-        if (userId != null) {
-            personId = userId
-            Log.d("USER ID", "Current logged-in user's ID: $userId")
+        if (userEmail != null) {
+            personId = userEmail
+            Log.d("USER ID", "Current logged-in user's ID: $userEmail")
         } else {
             personId = "Guest"
             Log.d("USER ID", "No user is currently logged in, setting user as guest")

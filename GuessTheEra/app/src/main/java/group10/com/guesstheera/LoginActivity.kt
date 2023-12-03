@@ -96,7 +96,7 @@ class LoginActivity : AppCompatActivity() {
                     Log.d(TAG, "signInWithCredential:success")
                     val user = auth.currentUser
                     if (user != null) {
-                        personId = user.uid
+                        personId = user.email.toString()
                     }
                     var intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)
