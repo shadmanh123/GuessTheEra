@@ -5,6 +5,9 @@ import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import group10.com.guesstheera.backend.FirebaseApplication
+import group10.com.guesstheera.backend.ImageDatabaseViewModel
 
 class GameViewModel : ViewModel() {
 
@@ -77,11 +80,15 @@ class GameViewModel : ViewModel() {
         R.drawable.p_2013 to "2013",
         R.drawable.p_2014 to "2014"
     )
+    private var imageArrayList: ArrayList<ByteArray>? = ArrayList()
+    private val imageDatabaseViewModel = FirebaseApplication.imageDatabaseViewModel
+
 
     init {
         gameList = getRandomSubList(imageList, 5)
         imageGameMap = createImageNamesMap(gameList)
         yearList = imageGameMap.values.toList()
+        imageArrayList = imageDatabaseViewModel.imageArray.value
     }
 
     // Function to get a random sublist of 5 for now

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -11,12 +12,14 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
 import group10.com.guesstheera.R
+import group10.com.guesstheera.backend.ImageDatabaseViewModel
 import group10.com.guesstheera.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
+    private lateinit var imageDatabaseViewModel: ImageDatabaseViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,6 +29,10 @@ class MainActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.appBarMain.toolbar)
 
+        imageDatabaseViewModel = ViewModelProvider(this,
+            ViewModelProvider.AndroidViewModelFactory(application))[ImageDatabaseViewModel::class.java]
+
+        imageDatabaseViewModel.startDownloadProcess()
         /*//floating mail button listener
         binding.appBarMain.fab.setOnClickListener {
             view ->
