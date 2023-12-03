@@ -405,6 +405,7 @@ class MultiplayerGameActivity : AppCompatActivity() {
             score.text = "Score: $totalScore"
             //if player1 id is associated with this instance
             if (player1Id == personId){
+                gameRef.child("player1").child("score").setValue(totalScore)
                 gameRef.child("player1").child("stage").setValue(currentIndex)
                 gameRef.child("player1").child("UID").setValue(player1Id)
             }
@@ -473,9 +474,11 @@ class MultiplayerGameActivity : AppCompatActivity() {
         //adding functionality to set player stage to 5 if they exit game
         if (player1Id == personId){
             gameRef.child("player1").child("stage").setValue(5)
+            gameRef.child("player1").child("UID").setValue(player1Id)
         }
         else{
             gameRef.child("player2").child("stage").setValue(5)
+            gameRef.child("player2").child("UID").setValue(player2Id)
         }
 
     }
@@ -485,9 +488,11 @@ class MultiplayerGameActivity : AppCompatActivity() {
         //adding functionality to set player stage to 5 if they exit game
         if (player1Id == personId){
             gameRef.child("player1").child("stage").setValue(5)
+            gameRef.child("player1").child("UID").setValue(player1Id)
         }
         else{
             gameRef.child("player2").child("stage").setValue(5)
+            gameRef.child("player2").child("UID").setValue(player2Id)
         }
     }
 
