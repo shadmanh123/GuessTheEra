@@ -23,6 +23,7 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import group10.com.guesstheera.R
+import group10.com.guesstheera.backend.ScoreRepository
 import group10.com.guesstheera.mainview.MainActivity
 
 import kotlin.math.absoluteValue
@@ -287,7 +288,7 @@ class MultiplayerGameActivity : AppCompatActivity() {
             guess.isEnabled = false
             gameViewModel.timerStop()
             //show dialog that game is ended with final score, ability to go to leaderboard or play another game
-            showGameFinishedDialog(this)
+            onGameFinished(this)
         }
     }
 
@@ -391,12 +392,17 @@ class MultiplayerGameActivity : AppCompatActivity() {
 
             guess.isEnabled = false
             gameViewModel.timerStop()
-            showGameFinishedDialog(this)
+            onGameFinished(this)
         }
     }
 
     //dialog created upon finishing the game or running out of time
-    private fun showGameFinishedDialog(activity: Activity?) {
+    private fun onGameFinished(activity: Activity?) {
+        val repository = ScoreRepository()
+        val viewModelFactory = ScoreViewModelFactory(gameIntent, repository)
+        val viewModel = ViewModelProvider(this, viewModelFactory)[ScoreViewModel::class.java]
+        viewModel.updateOwnScore(totalScore > opponentScore)
+        
         val dialogView = LayoutInflater.from(activity).inflate(R.layout.multiplayer_game_finish_dialog, null)
         val dialog = AlertDialog.Builder(activity)
             .setView(dialogView)
