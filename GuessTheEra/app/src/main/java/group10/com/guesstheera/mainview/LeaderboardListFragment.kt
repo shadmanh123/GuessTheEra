@@ -35,7 +35,7 @@ class LeaderboardListFragment(private val difficulty: String): Fragment() {
             highScoreStored = requireContext().getSharedPreferences("hardModeHighScore", AppCompatActivity.MODE_PRIVATE)
         }
         highScore = highScoreStored.getInt("highScore", 0)
-        highScoreTextView.setText("High Score: $highScore")
+        highScoreTextView.setText("Solo High Score: $highScore")
         return leaderboardView
     }
 }
