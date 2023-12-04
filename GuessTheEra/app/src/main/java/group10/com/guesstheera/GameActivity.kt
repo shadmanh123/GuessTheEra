@@ -360,6 +360,8 @@ class GameActivity : AppCompatActivity() {
             currentIndex++
             slider.progress = 60
         } else {
+            // start the download process as soon as the final guess is made
+            FirebaseApplication.imageDatabaseViewModel.startDownloadProcess()
             //lock in current guess
             totalScore += checkGuessHard(currentImage, currentGuess)
             score.text = "Score: $totalScore"
@@ -381,18 +383,15 @@ class GameActivity : AppCompatActivity() {
         val showLeaderboard: Button = dialogView.findViewById(R.id.buttonLeaderboard)
 
         finalScore.text = "Score: $totalScore"
+
+
+        //FirebaseApplication.imageDatabaseViewModel.startDownloadProcess()
         // Set up the button click listeners
         playAgain.setOnClickListener {
             dialog.dismiss()
             //restart the GameActivity
             //reset view model images
-            FirebaseApplication.imageDatabaseViewModel.startDownloadProcess()
-            val handler = Handler()
-            handler.postDelayed({
-                gameViewModel.resetGameImageList()
-                this@GameActivity.recreate()
-            }, 1000)
-            //this@GameActivity.recreate()
+            this@GameActivity.recreate()
         }
 
         showLeaderboard.setOnClickListener {

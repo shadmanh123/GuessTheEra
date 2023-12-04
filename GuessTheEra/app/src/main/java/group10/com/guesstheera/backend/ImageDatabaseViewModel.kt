@@ -16,34 +16,41 @@ class ImageDatabaseViewModel(application: Application): AndroidViewModel(applica
     private var storage: FirebaseStorage = Firebase.storage
     private val _imageArray = MutableLiveData<ArrayList<ByteArray>>()
     private val _imageFilePathsList = MutableLiveData<List<String>>()
+    private val downloadState = MutableLiveData<Boolean>()
 
     val imageArray: LiveData<ArrayList<ByteArray>> get() = _imageArray
     val imageFilePathsList: LiveData<List<String>> get() = _imageFilePathsList
     private val firestore: FirebaseFirestore get() = FirebaseFirestore.getInstance()
 
     /**
-     * gets document holding filepaths to images from firestore as an argument, and seed
+     * gets list holding filepaths to images from firestore as an argument, and seed
      * then shuffle to randomize and take the first 5 as a subset
+     * download the images from cloud storage bucket and set them into appropriate index when download task is complete
      * update the live filepaths list for the subset -> to be used to determine the year the photo was taken
+     * update the live image array for the subset -> used by GameViewModel
      */
     private fun downloadImagesForGame(imageList: List<String>, seed: Long) {
         //val shuffledImageFilePathList = imageList.shuffled(Random(seed))
         val shuffledImageFilePathList = imageList.shuffled()
         val gameImageFilePathList = shuffledImageFilePathList.take(5)
-        updateImageFilePathsList(gameImageFilePathList)
 
         val storageRef = storage.reference
-        val ONE_MB: Long = 1024*1024
+        val TWO_MB: Long = 2*1024*1024
         val images: ArrayList<ByteArray> = ArrayList()
+        val emptyByteArray = ByteArray(0)
 
-        for (filepath in gameImageFilePathList) {
+        for (index in gameImageFilePathList.indices) {
+            val filepath = gameImageFilePathList[index]
             val imageRef = storageRef.child(filepath)
-            imageRef.getBytes(ONE_MB).addOnSuccessListener {
-                Log.d("debug: getting image from storage bucket", it.toString())
-                images.add(it)
-                Log.d("debug: images list size inside", images.size.toString())
-                if (images.size == gameImageFilePathList.size) {
+            images.add(index, emptyByteArray)
+            imageRef.getBytes(TWO_MB).addOnSuccessListener {
+
+                //place successful download in correct index
+                images.set(index, it)
+                val taskFinished: Boolean = !images.contains(emptyByteArray)
+                if (images.size == gameImageFilePathList.size && taskFinished) {
                     updateImageArrayList(images)
+                    updateImageFilePathsList(gameImageFilePathList)
                 }
             }.addOnFailureListener {
                 Log.d("debug: getting image failed", it.toString())
@@ -51,16 +58,24 @@ class ImageDatabaseViewModel(application: Application): AndroidViewModel(applica
         }
     }
 
-    private fun updateImageFilePathsList(filepaths: List<String>) {
-        _imageFilePathsList.value = filepaths
-    }
-    private fun updateImageArrayList(images: ArrayList<ByteArray>) {
-        _imageArray.value = images
+    fun startDownloadProcess() {
+        if (downloadState.value == true) {
+            Log.d("debug: download state", "")
+            return
+        }
+        downloadState.value = true
+        getImagesDocument()
+        downloadState.value = false
     }
 
-    fun startDownloadProcess() {
-        getImagesDocument()
-    }
+    /*fun isDownloading(): LiveData<Boolean> {
+        return downloadState
+    }*/
+
+    /**
+     * gets the document from firestore containing the array of image filepaths,
+     * passes filepaths to downloadImagesForGame()
+     */
     private fun getImagesDocument() {
         val imageCollection = firestore.collection("images")
         Log.d("debug: getting collection", imageCollection.toString())
@@ -83,4 +98,13 @@ class ImageDatabaseViewModel(application: Application): AndroidViewModel(applica
                 Log.e("debug: getting document failed", e.toString())
             }
     }
+
+    private fun updateImageFilePathsList(filepaths: List<String>) {
+        _imageFilePathsList.value = filepaths
+    }
+    private fun updateImageArrayList(images: ArrayList<ByteArray>) {
+        _imageArray.value = images
+    }
+
+
 }
