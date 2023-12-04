@@ -27,9 +27,7 @@ class LeaderboardFragment : Fragment() {
     private lateinit var leaderboardViewPager: ViewPager2
     private lateinit var leaderboardTabLayout: TabLayout
     private lateinit var tabLayoutMediator:TabLayoutMediator
-    private var highScore: Int? = null
-    private lateinit var highScoreStored: SharedPreferences
-    private lateinit var highScoreTextView: TextView
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,7 +39,7 @@ class LeaderboardFragment : Fragment() {
 
         fragmentList = DifficultyUtil.difficultyOptions.map { LeaderboardListFragment(it) }
         tabAdapter = LeaderboardTabAdapter(requireActivity(), fragmentList)
-        highScoreTextView = root.findViewById(R.id.highScoreTV)
+
 
         leaderboardViewPager = root.findViewById(R.id.leaderboard_page)
         leaderboardViewPager.adapter = tabAdapter
@@ -53,9 +51,6 @@ class LeaderboardFragment : Fragment() {
             }
         tabLayoutMediator = TabLayoutMediator(leaderboardTabLayout, leaderboardViewPager, tabConfigurationStrategy)
         tabLayoutMediator.attach()
-        highScoreStored = requireContext().getSharedPreferences("HighScore", AppCompatActivity.MODE_PRIVATE)
-        highScore = highScoreStored.getInt("highScore", 0)
-        highScoreTextView.setText("High Score: $highScore")
         return root
     }
 

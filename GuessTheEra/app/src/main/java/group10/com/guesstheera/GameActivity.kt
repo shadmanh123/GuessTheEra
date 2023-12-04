@@ -29,7 +29,8 @@ class GameActivity : AppCompatActivity() {
     private lateinit var image: ImageView
     private lateinit var guess: Button
     private lateinit var score: TextView
-    private lateinit var highScoreStored: SharedPreferences
+    private lateinit var easyModeHighScoreStored: SharedPreferences
+    private lateinit var hardModeHighScoreStored: SharedPreferences
 
     //will need to be set by intent from
     private var gameIntent = ""
@@ -43,6 +44,8 @@ class GameActivity : AppCompatActivity() {
     private var customMode = 0
     private var customTime = 30 //set default time
     private var customGrayscale = false
+
+    private var currentHighScore = 0
 
     companion object{
         val DIFFICULTY_KEY = "option_difficulty"
@@ -371,7 +374,7 @@ class GameActivity : AppCompatActivity() {
         val finalScore: TextView = dialogView.findViewById(R.id.finalScore)
         val playAgain: Button = dialogView.findViewById(R.id.buttonPlayAgain)
         val showLeaderboard: Button = dialogView.findViewById(R.id.buttonLeaderboard)
-        updateHighScore(totalScore)
+        updateHighScore(totalScore, gameIntent)
         finalScore.text = "Score: $totalScore"
         // Set up the button click listeners
         playAgain.setOnClickListener {
@@ -392,14 +395,24 @@ class GameActivity : AppCompatActivity() {
         dialog.show()
     }
 
-    private fun updateHighScore(totalScore: Int) {
-        highScoreStored = getSharedPreferences("HighScore", MODE_PRIVATE)
-        val currentHighScore = highScoreStored.getInt("highScore", 0)
-
-        if (totalScore > currentHighScore){
-            val editor = highScoreStored.edit()
-            editor.putInt("highScore", totalScore)
-            editor.apply()
+    private fun updateHighScore(totalScore: Int, gameIntent: String) {
+        if (gameIntent == "Regular") {
+            easyModeHighScoreStored = getSharedPreferences("easyModeHighScore", MODE_PRIVATE)
+            currentHighScore = easyModeHighScoreStored.getInt("highScore", 0)
+            if (totalScore > currentHighScore){
+                val editor = easyModeHighScoreStored.edit()
+                editor.putInt("highScore", totalScore)
+                editor.apply()
+            }
+        }
+        else{
+            hardModeHighScoreStored = getSharedPreferences("hardModeHighScore", MODE_PRIVATE)
+            currentHighScore = hardModeHighScoreStored.getInt("highScore", 0)
+            if (totalScore > currentHighScore){
+                val editor = hardModeHighScoreStored.edit()
+                editor.putInt("highScore", totalScore)
+                editor.apply()
+            }
         }
     }
 
