@@ -33,12 +33,12 @@ class OnlineGameStartActivity : AppCompatActivity() {
     private lateinit var createBtn: Button
     private lateinit var joinBtn: Button
     private lateinit var progressBar: ProgressBar
+    private lateinit var cancelActivity: Button
     private var gameId = ""
     private var codeFound = false
 
     private var gameIntent = ""
-    //TODO must have a look at creating a cancel button for hosters, called onDestroy and resets UI
-    //TODO also need to check if user has signed into google, should be done here in OnCreate, maybe disable buttons
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_online_game_start)
@@ -49,23 +49,37 @@ class OnlineGameStartActivity : AppCompatActivity() {
         progressBar = findViewById(R.id.idPBLoading)
         loading = findViewById(R.id.loadingText)
         cancelBtn = findViewById(R.id.cancelHost)
+        cancelActivity = findViewById(R.id.cancelActivity)
 
         gameIntent = intent.getStringExtra(GameActivity.DIFFICULTY_KEY).toString()
         heading.text = "$gameIntent Mode"
 
         val user = FirebaseAuth.getInstance().currentUser
-        val userId = user?.uid // This is the user's unique ID in Firebase
+        val userEmail = user?.email // This is the user's unique ID in Firebase
 
-        if (userId != null) {
-            personId = userId
-            Log.d("USER ID", "Current logged-in user's ID: $userId")
+        if (userEmail != null) {
+            personId = userEmail
+            Log.d("USER ID", "Current logged-in user's ID: $userEmail")
         } else {
             personId = "Guest"
             Log.d("USER ID", "No user is currently logged in, setting user as guest")
         }
 
+        if (personId == "Guest"){
+            createBtn.isEnabled = false
+            joinBtn.isEnabled = false
+            createBtn.visibility = View.GONE
+            joinBtn.visibility = View.GONE
+            cancelActivity.visibility = View.VISIBLE
+            Toast.makeText(this, "Login to Your Google Account to Play Online", Toast.LENGTH_LONG).show()
+        }
+
+        cancelActivity.setOnClickListener{
+            finish()
+        }
 
         createBtn.setOnClickListener {
+            loading.text = "Waiting For Player to Join Match"
             createBtn.visibility = View.GONE
             joinBtn.visibility = View.GONE
             //gameCode.visibility = View.GONE
@@ -122,7 +136,7 @@ class OnlineGameStartActivity : AppCompatActivity() {
         }
 
         joinBtn.setOnClickListener {
-
+            loading.text = "Searching for an open Match..."
             createBtn.visibility = View.GONE
             joinBtn.visibility = View.GONE
             //gameCode.visibility = View.VISIBLE

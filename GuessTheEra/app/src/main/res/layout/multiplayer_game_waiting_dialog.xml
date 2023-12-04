@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/mauve"
+    android:background="@color/coffee"
     android:orientation="vertical"
     android:padding="16dp">
 
@@ -24,46 +24,31 @@
         android:textColor="#000000"
         android:textSize="24sp" />
 
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:layout_weight="1" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:layout_weight="1" />
+
     <TextView
         android:id="@+id/opponentFinalScore"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="Opponent Final Score: "
+        android:background="@color/mauve"
+        android:text="Waiting for Opponent to Complete Game"
         android:textAlignment="center"
         android:textColor="#000000"
         android:textSize="24sp" />
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="25dp" />
-
-    <TextView
-        android:id="@+id/winner"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="The Winner is..."
-        android:textAlignment="center"
-        android:textColor="#000000"
-        android:textSize="24sp" />
-
-    <TextView
-        android:id="@+id/winnerUID"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="UID"
-        android:textAlignment="center"
-        android:textColor="#000000"
-        android:textSize="24sp"
-        android:textStyle="bold" />
-
-    <Button
-        android:id="@+id/buttonLeaderboard"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Leaderboard"
-        android:backgroundTint="@color/yinmin_blue"
-        android:textColor="@color/white"/>
 </LinearLayout>

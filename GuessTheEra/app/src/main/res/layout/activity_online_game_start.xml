@@ -69,6 +69,20 @@
         android:textAllCaps="false"
         android:textColor="@color/white" />
 
+    <Button
+        android:id="@+id/cancelActivity"
+        android:layout_width="160dp"
+        android:layout_height="90dp"
+        android:layout_below="@id/btnJoin"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="60dp"
+        android:backgroundTint="@color/yinmin_blue"
+        android:text="Cancel"
+        android:background="@drawable/rounded_button_blue"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:visibility="gone"/>
+
     <ProgressBar
         android:id="@+id/idPBLoading"
         android:layout_width="wrap_content"

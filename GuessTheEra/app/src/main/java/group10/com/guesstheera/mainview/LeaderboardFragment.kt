@@ -1,9 +1,12 @@
 package group10.com.guesstheera.mainview
 
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
@@ -25,6 +28,7 @@ class LeaderboardFragment : Fragment() {
     private lateinit var leaderboardTabLayout: TabLayout
     private lateinit var tabLayoutMediator:TabLayoutMediator
 
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -36,6 +40,7 @@ class LeaderboardFragment : Fragment() {
         fragmentList = DifficultyUtil.difficultyOptions.map { LeaderboardListFragment(it) }
         tabAdapter = LeaderboardTabAdapter(requireActivity(), fragmentList)
 
+
         leaderboardViewPager = root.findViewById(R.id.leaderboard_page)
         leaderboardViewPager.adapter = tabAdapter
 
@@ -46,7 +51,6 @@ class LeaderboardFragment : Fragment() {
             }
         tabLayoutMediator = TabLayoutMediator(leaderboardTabLayout, leaderboardViewPager, tabConfigurationStrategy)
         tabLayoutMediator.attach()
-
         return root
     }
 

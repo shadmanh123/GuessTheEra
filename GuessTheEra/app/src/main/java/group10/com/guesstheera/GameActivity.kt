@@ -3,6 +3,7 @@ package group10.com.guesstheera
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.ColorMatrix
 import android.graphics.ColorMatrixColorFilter
 import android.os.Bundle
@@ -16,7 +17,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import group10.com.guesstheera.backend.ScoreRepository
 import group10.com.guesstheera.mainview.MainActivity
 import kotlin.math.absoluteValue
 
@@ -29,6 +29,8 @@ class GameActivity : AppCompatActivity() {
     private lateinit var image: ImageView
     private lateinit var guess: Button
     private lateinit var score: TextView
+    private lateinit var easyModeHighScoreStored: SharedPreferences
+    private lateinit var hardModeHighScoreStored: SharedPreferences
 
     //will need to be set by intent from
     private var gameIntent = ""
@@ -42,6 +44,8 @@ class GameActivity : AppCompatActivity() {
     private var customMode = 0
     private var customTime = 30 //set default time
     private var customGrayscale = false
+
+    private var currentHighScore = 0
 
     companion object{
         val DIFFICULTY_KEY = "option_difficulty"
@@ -263,7 +267,7 @@ class GameActivity : AppCompatActivity() {
             guess.isEnabled = false
             gameViewModel.timerStop()
             //show dialog that game is ended with final score, ability to go to leaderboard or play another game
-            onGameFinished(this)
+            showGameFinishedDialog(this)
         }
     }
 
@@ -357,13 +361,12 @@ class GameActivity : AppCompatActivity() {
             //maybe create intent for new fragment or activity showing score
             guess.isEnabled = false
             gameViewModel.timerStop()
-            onGameFinished(this)
+            showGameFinishedDialog(this)
         }
     }
 
     //dialog created upon finishing the game or running out of time
-    //also game score is updated
-    private fun onGameFinished(activity: Activity?) {
+    private fun showGameFinishedDialog(activity: Activity?) {
         val dialogView = LayoutInflater.from(activity).inflate(R.layout.game_finish_dialog, null)
         val dialog = AlertDialog.Builder(activity)
             .setView(dialogView)
@@ -371,7 +374,7 @@ class GameActivity : AppCompatActivity() {
         val finalScore: TextView = dialogView.findViewById(R.id.finalScore)
         val playAgain: Button = dialogView.findViewById(R.id.buttonPlayAgain)
         val showLeaderboard: Button = dialogView.findViewById(R.id.buttonLeaderboard)
-
+        updateHighScore(totalScore, gameIntent)
         finalScore.text = "Score: $totalScore"
         // Set up the button click listeners
         playAgain.setOnClickListener {
@@ -390,6 +393,27 @@ class GameActivity : AppCompatActivity() {
 
         // Display the custom dialog
         dialog.show()
+    }
+
+    private fun updateHighScore(totalScore: Int, gameIntent: String) {
+        if (gameIntent == "Regular") {
+            easyModeHighScoreStored = getSharedPreferences("easyModeHighScore", MODE_PRIVATE)
+            currentHighScore = easyModeHighScoreStored.getInt("highScore", 0)
+            if (totalScore > currentHighScore){
+                val editor = easyModeHighScoreStored.edit()
+                editor.putInt("highScore", totalScore)
+                editor.apply()
+            }
+        }
+        else{
+            hardModeHighScoreStored = getSharedPreferences("hardModeHighScore", MODE_PRIVATE)
+            currentHighScore = hardModeHighScoreStored.getInt("highScore", 0)
+            if (totalScore > currentHighScore){
+                val editor = hardModeHighScoreStored.edit()
+                editor.putInt("highScore", totalScore)
+                editor.apply()
+            }
+        }
     }
 
     private fun routeToLeaderboardFragment() {
