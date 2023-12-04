@@ -1,5 +1,6 @@
 package group10.com.guesstheera.backend
 
+import android.util.Log
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -13,6 +14,7 @@ class ScoreRepository {
         multiPlayerScoresCollection.orderByChild("gameType").equalTo(difficulty)
             .addValueEventListener(object: ValueEventListener{
                 override fun onDataChange(snapshot: DataSnapshot) {
+                    Log.d("Score Repository", "received multiplayer games snapshot")
                     val scoreMap = mutableMapOf<String, Score>()
                     snapshot.children.forEach {
                         child ->
