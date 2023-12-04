@@ -7,6 +7,7 @@ import android.content.SharedPreferences
 import android.graphics.ColorMatrix
 import android.graphics.ColorMatrixColorFilter
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.widget.Button
@@ -15,8 +16,14 @@ import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat.recreate
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.google.firebase.database.FirebaseDatabase
+import group10.com.guesstheera.backend.FirebaseApplication
+import group10.com.guesstheera.mainview.GameOptionsFragment.Companion.DIFFICULTY_KEY
+import group10.com.guesstheera.mainview.LeaderboardFragment
 import group10.com.guesstheera.mainview.MainActivity
 import kotlin.math.absoluteValue
 
@@ -107,7 +114,7 @@ class GameActivity : AppCompatActivity() {
             image.colorFilter = filter
         }
         //set the current image
-        image.setImageResource(gameViewModel.gameList.first())
+        image.setImageBitmap(gameViewModel.gameList.first())
 
         //call helper function when player guesses or they run out of time
         guess.setOnClickListener {
@@ -154,7 +161,7 @@ class GameActivity : AppCompatActivity() {
             val filter = ColorMatrixColorFilter(colorMatrix)
             image.colorFilter = filter
         }
-        image.setImageResource(gameViewModel.gameList.first())
+        image.setImageBitmap(gameViewModel.gameList.first())
 
         guess.setOnClickListener {
             updateUIOnGuessHard(time)
@@ -255,7 +262,7 @@ class GameActivity : AppCompatActivity() {
                 val filter = ColorMatrixColorFilter(colorMatrix)
                 image.colorFilter = filter
             }
-            image.setImageResource(gameViewModel.gameList[currentIndex])
+            image.setImageBitmap(gameViewModel.gameList[currentIndex])
 
             gameViewModel.startTimer(time)
             currentIndex++
@@ -349,12 +356,14 @@ class GameActivity : AppCompatActivity() {
                 image.colorFilter = filter
             }
 
-            image.setImageResource(gameViewModel.gameList[currentIndex])
+            image.setImageBitmap(gameViewModel.gameList[currentIndex])
 
             gameViewModel.startTimer(time)
             currentIndex++
             slider.progress = 60
         } else {
+            // start the download process as soon as the final guess is made
+            FirebaseApplication.imageDatabaseViewModel.startDownloadProcess()
             //lock in current guess
             totalScore += checkGuessHard(currentImage, currentGuess)
             score.text = "Score: $totalScore"
@@ -376,12 +385,14 @@ class GameActivity : AppCompatActivity() {
         val showLeaderboard: Button = dialogView.findViewById(R.id.buttonLeaderboard)
         updateHighScore(totalScore, gameIntent)
         finalScore.text = "Score: $totalScore"
+
+
+        //FirebaseApplication.imageDatabaseViewModel.startDownloadProcess()
         // Set up the button click listeners
         playAgain.setOnClickListener {
             dialog.dismiss()
             //restart the GameActivity
             //reset view model images
-            gameViewModel.resetGameImageList()
             this@GameActivity.recreate()
         }
 

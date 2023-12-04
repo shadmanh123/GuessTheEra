@@ -29,7 +29,6 @@ import group10.com.guesstheera.mainview.MainActivity
 
 import kotlin.math.absoluteValue
 
-//can only refine the scoring until shad gets the google login to work
 class MultiplayerGameActivity : AppCompatActivity() {
 //https://chat.openai.com/share/638070d6-c768-43f5-8c90-8cf248bc9f0a
     private lateinit var yearSelected: TextView
@@ -144,7 +143,7 @@ class MultiplayerGameActivity : AppCompatActivity() {
         //set grayscale for custom mode
 
         //set the current image
-        image.setImageResource(gameViewModel.gameList.first())
+        image.setImageBitmap(gameViewModel.gameList.first())
 
         //call helper function when player guesses or they run out of time
         guess.setOnClickListener {
@@ -182,7 +181,7 @@ class MultiplayerGameActivity : AppCompatActivity() {
         slider.max = 120
         slider.progress = 60
 
-        image.setImageResource(gameViewModel.gameList.first())
+        image.setImageBitmap(gameViewModel.gameList.first())
 
         guess.setOnClickListener {
             updateUIOnGuessHard(time)
@@ -286,7 +285,7 @@ class MultiplayerGameActivity : AppCompatActivity() {
 
 
             //iterate list and set slider for next image
-            image.setImageResource(gameViewModel.gameList[currentIndex])
+            image.setImageBitmap(gameViewModel.gameList[currentIndex])
 
             gameViewModel.startTimer(time)
             currentIndex++
@@ -394,7 +393,7 @@ class MultiplayerGameActivity : AppCompatActivity() {
             playerRef.child("stage").setValue(currentIndex)
 
 
-            image.setImageResource(gameViewModel.gameList[currentIndex])
+            image.setImageBitmap(gameViewModel.gameList[currentIndex])
 
             gameViewModel.startTimer(time)
             currentIndex++

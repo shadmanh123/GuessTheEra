@@ -13,6 +13,8 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import group10.com.guesstheera.R
+import group10.com.guesstheera.backend.FirebaseApplication
+import group10.com.guesstheera.backend.ImageDatabaseViewModel
 import group10.com.guesstheera.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -29,6 +31,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setSupportActionBar(binding.appBarMain.toolbar)
+
+        FirebaseApplication.imageDatabaseViewModel.startDownloadProcess()
         /*//floating mail button listener
         binding.appBarMain.fab.setOnClickListener {
             view ->
