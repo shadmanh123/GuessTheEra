@@ -91,10 +91,12 @@ class GameActivity : AppCompatActivity() {
 
             //player set easy mode
             if (customMode == 0){
+                gameIntent = "Hard"
                 startHardModeGame(customTime)
             }
             //player set hard mode
             else {
+                gameIntent = "Regular"
                 startRegularModeGame(customTime)
             }
         }
