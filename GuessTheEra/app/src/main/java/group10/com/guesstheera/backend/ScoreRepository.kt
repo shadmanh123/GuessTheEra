@@ -58,7 +58,7 @@ class ScoreRepository {
 
     fun onChildAdded(child: DataSnapshot, difficulty: String) {
         val scoreMap = scoreMaps[difficulty]!!
-        val winner = child.child("winner").value as String
+        val winner = child.child("winner").value as? String
 
         val player1 = child.child("player1").child("UID").value as String
         var playerWon = player1 == winner
