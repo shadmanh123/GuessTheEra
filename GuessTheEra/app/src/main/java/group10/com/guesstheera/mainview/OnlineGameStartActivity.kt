@@ -51,9 +51,11 @@ class OnlineGameStartActivity : AppCompatActivity() {
         cancelBtn = findViewById(R.id.cancelHost)
         cancelActivity = findViewById(R.id.cancelActivity)
 
+        //grab game type from intent
         gameIntent = intent.getStringExtra(GameActivity.DIFFICULTY_KEY).toString()
         heading.text = "$gameIntent Mode"
 
+        //get the user name of player trying to join/create a game
         val user = FirebaseAuth.getInstance().currentUser
         val userEmail = user?.email // This is the user's unique ID in Firebase
 
@@ -65,6 +67,7 @@ class OnlineGameStartActivity : AppCompatActivity() {
             Log.d("USER ID", "No user is currently logged in, setting user as guest")
         }
 
+        //if person hasn't logged in make sure to not allow them to play the online mode.
         if (personId == "Guest"){
             createBtn.isEnabled = false
             joinBtn.isEnabled = false
@@ -78,7 +81,9 @@ class OnlineGameStartActivity : AppCompatActivity() {
             finish()
         }
 
+        //create button hosts a game that players who select the join button can play with
         createBtn.setOnClickListener {
+            //update UI to show user that they are waiting for player
             loading.text = "Waiting For Player to Join Match"
             createBtn.visibility = View.GONE
             joinBtn.visibility = View.GONE
@@ -88,14 +93,16 @@ class OnlineGameStartActivity : AppCompatActivity() {
             loading.visibility = View.VISIBLE
             cancelBtn.visibility = View.VISIBLE
 
+            //add new game to real time database and input player
             val newGameRef = FirebaseDatabase.getInstance().reference.child("games").push()
             gameId = newGameRef.key.toString()
             newGameRef.child("gameType").setValue(gameIntent)
             newGameRef.child("player1").setValue(personId)
 
-            // Listen for player2 to join
+            //listen for player2 to join
             val valueEventListener = object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
+                    //when player 2 has joined start activity for both parties
                     if (snapshot.child("player2").exists()) {
                         accepted()
                         newGameRef.removeEventListener(this)
@@ -108,6 +115,7 @@ class OnlineGameStartActivity : AppCompatActivity() {
             }
             newGameRef.addValueEventListener(valueEventListener)
 
+            //make sure to remove database entry if a user stops hosting a game
             cancelBtn.setOnClickListener {
                 if (!codeFound) {
                     //remove the game from Firebase
@@ -123,7 +131,7 @@ class OnlineGameStartActivity : AppCompatActivity() {
                 }
             }
 
-            // If the user leaves the screen before player2 joins, delete the game
+            //if the user leaves the screen before player2 joins, delete the game
             lifecycle.addObserver(object : DefaultLifecycleObserver {
                 override fun onDestroy(owner: LifecycleOwner) {
                     Log.d("IN ONDESTRYOY", "killing new game")
@@ -135,7 +143,9 @@ class OnlineGameStartActivity : AppCompatActivity() {
             })
         }
 
+        //joins a game if someone is currently hosting, if not after 5 seconds of searching it will cancel and tell user there are no games to join
         joinBtn.setOnClickListener {
+            //update UI to show user they are searching for a match
             loading.text = "Searching for an open Match..."
             createBtn.visibility = View.GONE
             joinBtn.visibility = View.GONE
@@ -145,6 +155,7 @@ class OnlineGameStartActivity : AppCompatActivity() {
             loading.visibility = View.VISIBLE
             //cancelBtn.visibility = View.VISIBLE
 
+            //make sure the game that is being hosted is the right game mode
             FirebaseDatabase.getInstance().reference.child("games")
                 .orderByChild("gameType").equalTo(gameIntent)
                 .addListenerForSingleValueEvent(object : ValueEventListener {
@@ -152,11 +163,13 @@ class OnlineGameStartActivity : AppCompatActivity() {
                         val openGame = snapshot.children.firstOrNull {
                             it.child("player2").value == null
                         }
+                        //if game found then get gameID and set player 2 to the gameID for real time updates and start multiplayer game
                         if (openGame != null) {
                             gameId = openGame.key.toString()
                             openGame.ref.child("player2").setValue(personId)
                             accepted()
                         } else {
+                            //show that no open games found after 5 seconds
                             Handler().postDelayed({
                                 Toast.makeText(this@OnlineGameStartActivity, "No open games found", Toast.LENGTH_SHORT).show()
                                 resetUiVisibility()
@@ -181,9 +194,11 @@ class OnlineGameStartActivity : AppCompatActivity() {
         loading.visibility = View.GONE
         cancelBtn.visibility = View.GONE
     }
+    //when the game is found run accepted for both player 1 and player 2
     fun accepted() {
         codeFound = true
         val intent = Intent(this, MultiplayerGameActivity::class.java)
+        //provide game Id and game mode for the multiplayer game
         intent.putExtra(GameActivity.DIFFICULTY_KEY, gameIntent)
         intent.putExtra("UNIQUE_GAME_KEY", gameId)
         startActivity(intent)
