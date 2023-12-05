@@ -46,6 +46,7 @@ class LeaderboardListFragment(private val difficulty: String): Fragment() {
         highScore = highScoreStored.getInt("highScore", 0)
         highScoreTextView.setText("Solo High Score: $highScore")
 
+
         val repository = ScoreRepository()
         val scoreViewModelFactory = ScoreViewModelFactory(difficulty, repository)
         scoreViewModel = ViewModelProvider(this as ViewModelStoreOwner,
