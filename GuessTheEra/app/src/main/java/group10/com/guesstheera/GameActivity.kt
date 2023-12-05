@@ -54,6 +54,8 @@ class GameActivity : AppCompatActivity() {
 
     private var currentHighScore = 0
 
+
+
     companion object{
         val DIFFICULTY_KEY = "option_difficulty"
         private val SCORE_KEY = "SCORE"
@@ -270,6 +272,8 @@ class GameActivity : AppCompatActivity() {
             currentIndex++
             slider.progress = 6
         } else {
+            // start the download process as soon as the final guess is made
+            FirebaseApplication.imageDatabaseViewModel.startDownloadProcess()
             totalScore += checkGuess(currentImage, currentGuess)
             score.text = "Score: $totalScore"
             //maybe create intent for new fragment or activity showing score

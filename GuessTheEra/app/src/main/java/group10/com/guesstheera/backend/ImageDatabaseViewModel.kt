@@ -17,6 +17,7 @@ class ImageDatabaseViewModel(application: Application): AndroidViewModel(applica
     private val _imageArray = MutableLiveData<ArrayList<ByteArray>>()
     private val _imageFilePathsList = MutableLiveData<List<String>>()
     private val downloadState = MutableLiveData<Boolean>()
+    private var prevGameImageFilePathsList : List<String>? = null
 
     val imageArray: LiveData<ArrayList<ByteArray>> get() = _imageArray
     val imageFilePathsList: LiveData<List<String>> get() = _imageFilePathsList
@@ -31,8 +32,18 @@ class ImageDatabaseViewModel(application: Application): AndroidViewModel(applica
      */
     private fun downloadImagesForGame(imageList: List<String>, seed: Long) {
         //val shuffledImageFilePathList = imageList.shuffled(Random(seed))
-        val shuffledImageFilePathList = imageList.shuffled()
-        val gameImageFilePathList = shuffledImageFilePathList.take(5)
+        var shuffledImageFilePathList = imageList.shuffled()
+        var gameImageFilePathList = shuffledImageFilePathList.take(5)
+
+        if (prevGameImageFilePathsList != null) {
+            var commonElements = gameImageFilePathList.intersect(prevGameImageFilePathsList!!.toSet())
+            while (commonElements.isNotEmpty()) {
+                shuffledImageFilePathList = shuffledImageFilePathList.shuffled()
+                gameImageFilePathList = shuffledImageFilePathList.take(5)
+                commonElements = gameImageFilePathList.intersect(prevGameImageFilePathsList!!.toSet())
+            }
+        }
+        prevGameImageFilePathsList = gameImageFilePathList
 
         val storageRef = storage.reference
         val TWO_MB: Long = 2*1024*1024
@@ -105,6 +116,4 @@ class ImageDatabaseViewModel(application: Application): AndroidViewModel(applica
     private fun updateImageArrayList(images: ArrayList<ByteArray>) {
         _imageArray.value = images
     }
-
-
 }
