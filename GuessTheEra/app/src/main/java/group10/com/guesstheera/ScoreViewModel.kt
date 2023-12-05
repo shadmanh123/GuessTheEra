@@ -16,14 +16,14 @@ class ScoreViewModel(private val difficulty:String,
 
     fun loadScore(limit: Int){
         repository.getLeaderBoardScores(difficulty, limit){
-            scores -> _topScores.postValue(scores)
+                scores -> _topScores.postValue(scores)
         }
     }
 }
 
 class ScoreViewModelFactory(private val difficulty:String,
                             private val repository: ScoreRepository)
-: ViewModelProvider.Factory{
+    : ViewModelProvider.Factory{
     // shamelessly copied from in-class example
     override fun<T: ViewModel> create(modelClass: Class<T>) : T{ //create() creates a new instance of the modelClass, which is CommentViewModel in this case.
         if(modelClass.isAssignableFrom(ScoreViewModel::class.java))

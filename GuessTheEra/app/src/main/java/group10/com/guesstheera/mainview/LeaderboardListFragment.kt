@@ -48,7 +48,7 @@ class LeaderboardListFragment(private val difficulty: String): Fragment() {
 
         val repository = ScoreRepository()
         val scoreViewModelFactory = ScoreViewModelFactory(difficulty, repository)
-        scoreViewModel = ViewModelProvider(requireContext() as ViewModelStoreOwner,
+        scoreViewModel = ViewModelProvider(this as ViewModelStoreOwner,
             scoreViewModelFactory)[ScoreViewModel::class.java]
 
         listView = leaderboardView?.findViewById(R.id.game_leaderboard)
@@ -57,11 +57,12 @@ class LeaderboardListFragment(private val difficulty: String): Fragment() {
         listView?.adapter = scoreListAdapter
 
         scoreViewModel.topScores.observe(requireActivity()){
-            list ->
+                list ->
             Log.d("Leaderboard", "Showing ${list.size} leaderboard listings")
             scoreListAdapter.replace(list)
             scoreListAdapter.notifyDataSetChanged()
         }
+        scoreViewModel.loadScore(LIMIT)
 
         return leaderboardView
     }
