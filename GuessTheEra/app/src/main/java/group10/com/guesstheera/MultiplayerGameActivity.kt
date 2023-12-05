@@ -76,6 +76,7 @@ class MultiplayerGameActivity : AppCompatActivity() {
         gameIntent = intent.getStringExtra(GameActivity.DIFFICULTY_KEY).toString()
         gameId = intent.getStringExtra("UNIQUE_GAME_KEY").toString()
 
+        //get gameID and gameIntent from the game start activity for active referencing in real time database
         gameRef = FirebaseDatabase.getInstance().reference.child("games").child(gameId)
         Log.d("CHECKING GAME KEY", "KEY: $gameId, Mode Selected: $gameIntent")
         if (gameIntent == "Regular"){
@@ -86,31 +87,39 @@ class MultiplayerGameActivity : AppCompatActivity() {
             startHardModeGame(30)
         }
 
+        //to create real time updates using real time database to keep track of changes
         gameRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()) {
+                    //initialize player 1 and player 2 Id's, make sure they are only set once
                     if (player1Id == "" && player2Id =="") {
                         player1Id = snapshot.child("player1").getValue(String::class.java) ?: ""
                         player2Id = snapshot.child("player2").getValue(String::class.java) ?: ""
                     }
-                    Log.d("Player names:", "Player 1 pix3: $player1Id, Player 2 pix6: $player2Id")
-                    //ensure player IDs are not empty, CANNOT CHECK UNTIL USERNAME IS FIXED
+                    Log.d("Player names:", "Player 1: $player1Id, Player 2: $player2Id")
+                    //ensure player IDs are not empty
                     if (player1Id.isNotEmpty() && player2Id.isNotEmpty()) {
                         //if player1 id is associated with this instance
                         opponentScore = if (player1Id == personId) {
+                            //update opponent score for whenever they guess an image's year
                             snapshot.child("player2").child("score").getValue(Int::class.java) ?: 0
                         } else {
+                            //if player 2 is associated with this instance get player 1 score as opponent for updates
                             snapshot.child("player1").child("score").getValue(Int::class.java) ?: 0
                         }
                         opponentTotalScore.text = "Opponent Score: $opponentScore"
-
+                        //get current stage of each player to see when to end the game (when both users at stage 5)
                         player1Stage = snapshot.child("player1").child("stage").getValue(Int::class.java) ?: 0
                         player2Stage = snapshot.child("player2").child("stage").getValue(Int::class.java) ?: 0
                         Log.d("STAGE OF PLAYER", "P1 Stage: $player1Stage, P2 Stage: $player2Stage")
+
+                        //when the game is finished
                         if (player1Stage == 5 && player2Stage == 5) {
+                            //grab both players scores
                             val p1Score = snapshot.child("player1").child("score").getValue(Int::class.java) ?: 0
                             val p2Score = snapshot.child("player2").child("score").getValue(Int::class.java) ?: 0
                             Log.d("STAGE OF PLAYER", "P1 Score: $p1Score, P2 Score: $p2Score")
+                            //check who wins or if there is a tie and update the winner to the real time database
                             //if score the same, show as tie
                             if (p1Score > p2Score) {
                                 winner = snapshot.child("player1").child("UID").getValue(String::class.java) ?: ""
@@ -124,6 +133,8 @@ class MultiplayerGameActivity : AppCompatActivity() {
                                 winner = "tie"
                                 gameRef.child("winner").setValue(winner)
                             }
+                            //show dialog for who won to users
+
                             showGameFinishedDialog(this@MultiplayerGameActivity, winner)
                         }
                     }
@@ -278,11 +289,9 @@ class MultiplayerGameActivity : AppCompatActivity() {
             } else {
                 gameRef.child("player2")
             }
-
+            //update the score and current stage of game to the database
             playerRef.child("score").setValue(totalScore)
             playerRef.child("stage").setValue(currentIndex)
-
-
 
             //iterate list and set slider for next image
             image.setImageBitmap(gameViewModel.gameList[currentIndex])
@@ -295,6 +304,7 @@ class MultiplayerGameActivity : AppCompatActivity() {
             totalScore += checkGuess(currentImage, currentGuess)
             score.text = "Score: $totalScore"
             //if player1 id is associated with this instance
+            //update the score and current stage of game to the database along with resetting the user ID to the database for referencing winner in future
             if (player1Id == personId){
                 gameRef.child("player1").child("score").setValue(totalScore)
                 gameRef.child("player1").child("stage").setValue(currentIndex)
@@ -310,7 +320,7 @@ class MultiplayerGameActivity : AppCompatActivity() {
 
             guess.isEnabled = false
             gameViewModel.timerStop()
-            //show dialog that game is ended with final score, ability to go to leaderboard or play another game
+            //stop timer and then show that you are waiting for user to finish game, if you are the last person to finish then the finished game dialog will show over this
             showWaitingDialog(this@MultiplayerGameActivity)
         }
     }
@@ -388,10 +398,9 @@ class MultiplayerGameActivity : AppCompatActivity() {
             } else {
                 gameRef.child("player2")
             }
-
+            //update the score and current stage of game to the database
             playerRef.child("score").setValue(totalScore)
             playerRef.child("stage").setValue(currentIndex)
-
 
             image.setImageBitmap(gameViewModel.gameList[currentIndex])
 
@@ -403,6 +412,7 @@ class MultiplayerGameActivity : AppCompatActivity() {
             totalScore += checkGuessHard(currentImage, currentGuess)
             score.text = "Score: $totalScore"
             //if player1 id is associated with this instance
+            //update the score and current stage of game to the database along with resetting the user ID to the database for referencing winner in future
             if (player1Id == personId){
                 gameRef.child("player1").child("score").setValue(totalScore)
                 gameRef.child("player1").child("stage").setValue(currentIndex)
@@ -415,7 +425,7 @@ class MultiplayerGameActivity : AppCompatActivity() {
                 gameRef.child("player2").child("UID").setValue(player2Id)
             }
 
-
+            //stop timer and then show that you are waiting for user to finish game, if you are the last person to finish then the finished game dialog will show over this
             guess.isEnabled = false
             gameViewModel.timerStop()
             showWaitingDialog(this@MultiplayerGameActivity)
