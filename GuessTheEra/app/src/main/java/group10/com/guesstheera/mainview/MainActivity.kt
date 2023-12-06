@@ -1,5 +1,6 @@
 package group10.com.guesstheera.mainview
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.widget.Button
@@ -12,6 +13,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
+import group10.com.guesstheera.LoginActivity
 import group10.com.guesstheera.R
 import group10.com.guesstheera.backend.FirebaseApplication
 import group10.com.guesstheera.backend.ImageDatabaseViewModel
@@ -52,7 +54,8 @@ class MainActivity : AppCompatActivity() {
         signOutButton = navView.getHeaderView(0).findViewById(R.id.signOutButton)
         signOutButton.setOnClickListener {
             auth.signOut()
-            finish()
+            var intentToLogin = Intent(this,LoginActivity::class.java)
+            startActivity(intentToLogin)
         }
 //        navController.addOnDestinationChangedListener { _, destination, _ ->
 //            if (destination.id == R.id.nav_leaderboard) {
