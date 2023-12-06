@@ -28,7 +28,7 @@ class ScoreRepository {
             override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
                 Log.d("Score Repository", "received multiplayer game data update")
                 val scoreMap = scoreMaps[difficulty]!!
-                val winner = snapshot.child("winner").value
+                val winner = snapshot.child("winner").value as? String? ?: return
                 // assume winner record already exists, and that only now do we know that they won
                 // if it doesn't exist, assume no winner
                 var score = scoreMap[winner]
@@ -59,40 +59,46 @@ class ScoreRepository {
     fun onChildAdded(child: DataSnapshot, difficulty: String) {
         val scoreMap = scoreMaps[difficulty]!!
         val winner = child.child("winner").value as? String
+        var playerWon: Boolean
 
-        val player1 = child.child("player1").child("UID").value as String
-        var playerWon = player1 == winner
-        val player1Record = scoreMap[player1]
-        if (player1Record == null) {
-            scoreMap[player1] = Score(
-                user_id = player1,
-                difficulty = difficulty,
-                wins = if (playerWon) 1 else 0,
-                losses = if (playerWon) 0 else 1
-            )
-        } else {
-            if (playerWon) {
-                player1Record.wins += 1
+
+        val player1 = child.child("player1").child("UID").value as? String
+        if (player1 != null) {
+            playerWon = player1 == winner
+            val player1Record = scoreMap[player1]
+            if (player1Record == null) {
+                scoreMap[player1] = Score(
+                    user_id = player1,
+                    difficulty = difficulty,
+                    wins = if (playerWon) 1 else 0,
+                    losses = if (playerWon) 0 else 1
+                )
             } else {
-                player1Record.losses += 1
+                if (playerWon) {
+                    player1Record.wins += 1
+                } else {
+                    player1Record.losses += 1
+                }
             }
         }
 
-        val player2 = child.child("player2").child("UID").value as String
-        playerWon = player2 == winner
-        val player2Record = scoreMap[player2]
-        if (player2Record == null) {
-            scoreMap[player2] = Score(
-                user_id = player2,
-                difficulty = difficulty,
-                wins = if (playerWon) 1 else 0,
-                losses = if (playerWon) 0 else 1
-            )
-        } else {
-            if (playerWon) {
-                player2Record.wins += 1
+        val player2 = child.child("player2").child("UID").value as? String
+        if (player2 != null) {
+            playerWon = player2 == winner
+            val player2Record = scoreMap[player2]
+            if (player2Record == null) {
+                scoreMap[player2] = Score(
+                    user_id = player2,
+                    difficulty = difficulty,
+                    wins = if (playerWon) 1 else 0,
+                    losses = if (playerWon) 0 else 1
+                )
             } else {
-                player2Record.losses += 1
+                if (playerWon) {
+                    player2Record.wins += 1
+                } else {
+                    player2Record.losses += 1
+                }
             }
         }
     }
