@@ -38,7 +38,7 @@ class MultiplayerGameActivity : AppCompatActivity() {
     private lateinit var image: ImageView
     private lateinit var guess: Button
     private lateinit var score: TextView
-
+    private var backPressed: Boolean = false
     //will need to be set by intent from
     private var gameIntent = ""
     private var currentGuess = 0
@@ -135,8 +135,9 @@ class MultiplayerGameActivity : AppCompatActivity() {
                                 gameRef.child("winner").setValue(winner)
                             }
                             //show dialog for who won to users
-
-                            showGameFinishedDialog(this@MultiplayerGameActivity, winner)
+                            if (backPressed == false) {
+                                showGameFinishedDialog(this@MultiplayerGameActivity, winner)
+                            }
                         }
                     }
                 }
@@ -477,6 +478,12 @@ class MultiplayerGameActivity : AppCompatActivity() {
             //putExtra("SCORE_KEY", totalScore)
         }
         startActivity(intent)
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        backPressed = true
+        finish()
     }
 
     override fun onDestroy() {

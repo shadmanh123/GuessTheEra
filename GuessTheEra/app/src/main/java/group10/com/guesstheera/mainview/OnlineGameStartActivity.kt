@@ -205,4 +205,10 @@ class OnlineGameStartActivity : AppCompatActivity() {
         intent.putExtra("UNIQUE_GAME_KEY", gameId)
         startActivity(intent)
     }
+    override fun onResume() {
+        super.onResume()
+        cancelBtn.setOnClickListener {
+            finish()
+        }
+    }
 }
