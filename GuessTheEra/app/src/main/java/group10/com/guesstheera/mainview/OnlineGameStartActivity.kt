@@ -154,7 +154,7 @@ class OnlineGameStartActivity : AppCompatActivity() {
             heading.visibility = View.GONE
             progressBar.visibility = View.VISIBLE
             loading.visibility = View.VISIBLE
-            //cancelBtn.visibility = View.VISIBLE
+            cancelActivity.visibility = View.GONE
 
             //make sure the game that is being hosted is the right game mode
             FirebaseDatabase.getInstance().reference.child("games")
