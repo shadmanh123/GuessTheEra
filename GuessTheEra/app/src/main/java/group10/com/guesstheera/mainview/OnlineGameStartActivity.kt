@@ -66,14 +66,14 @@ class OnlineGameStartActivity : AppCompatActivity() {
             personId = "Guest"
             Log.d("USER ID", "No user is currently logged in, setting user as guest")
         }
-
+        cancelActivity.visibility = View.VISIBLE
         //if person hasn't logged in make sure to not allow them to play the online mode.
+
         if (personId == "Guest"){
             createBtn.isEnabled = false
             joinBtn.isEnabled = false
             createBtn.visibility = View.GONE
             joinBtn.visibility = View.GONE
-            cancelActivity.visibility = View.VISIBLE
             Toast.makeText(this, "Login to Your Google Account to Play Online", Toast.LENGTH_LONG).show()
         }
 
@@ -92,6 +92,7 @@ class OnlineGameStartActivity : AppCompatActivity() {
             progressBar.visibility = View.VISIBLE
             loading.visibility = View.VISIBLE
             cancelBtn.visibility = View.VISIBLE
+            cancelActivity.visibility = View.GONE
 
             //add new game to real time database and input player
             val newGameRef = FirebaseDatabase.getInstance().reference.child("games").push()
@@ -193,6 +194,7 @@ class OnlineGameStartActivity : AppCompatActivity() {
         progressBar.visibility = View.GONE
         loading.visibility = View.GONE
         cancelBtn.visibility = View.GONE
+        cancelActivity.visibility = View.VISIBLE
     }
     //when the game is found run accepted for both player 1 and player 2
     fun accepted() {
