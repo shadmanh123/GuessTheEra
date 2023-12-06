@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/sage"
+    tools:context=".mainview.OnlineGameStartActivity">
+
+    <TextView
+        android:id="@+id/loadingText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="Waiting For Player to Join Match"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textSize="30sp"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/tvHead"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="Hard Mode"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textSize="30sp" />
+
+    <EditText
+        android:id="@+id/edtCode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvHead"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="30dp"
+        android:hint="Enter Code"
+        android:visibility="gone"/>
+
+    <Button
+        android:id="@+id/btnCreate"
+        android:layout_width="160dp"
+        android:layout_height="90dp"
+        android:layout_below="@id/edtCode"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:backgroundTint="@color/yinmin_blue"
+        android:text="Host Game"
+        android:background="@drawable/rounded_button_blue"
+        android:textAllCaps="false"
+        android:textColor="@color/white" />
+
+    <Button
+        android:id="@+id/btnJoin"
+        android:layout_width="160dp"
+        android:layout_height="90dp"
+        android:layout_below="@id/btnCreate"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="60dp"
+        android:backgroundTint="@color/yinmin_blue"
+        android:text="Join Game"
+        android:background="@drawable/rounded_button_blue"
+        android:textAllCaps="false"
+        android:textColor="@color/white" />
+
+    <Button
+        android:id="@+id/cancelActivity"
+        android:layout_width="160dp"
+        android:layout_height="90dp"
+        android:layout_below="@id/btnJoin"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="60dp"
+        android:backgroundTint="@color/yinmin_blue"
+        android:text="Cancel"
+        android:background="@drawable/rounded_button_blue"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:visibility="gone"/>
+
+    <ProgressBar
+        android:id="@+id/idPBLoading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+
+    <Button
+        android:id="@+id/cancelHost"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="40dp"
+        android:text="Cancel"
+        android:backgroundTint="@color/yinmin_blue"
+        android:textColor="@color/white"
+        android:visibility="gone" />
+
+</RelativeLayout>

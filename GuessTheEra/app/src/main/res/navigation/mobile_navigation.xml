@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_leaderboard"
+    app:route="@+id/nav_leaderboard">
+
+    <fragment
+        android:id="@+id/nav_leaderboard"
+        android:name="group10.com.guesstheera.mainview.LeaderboardFragment"
+        android:label="Leaderboard"
+        tools:layout="@layout/fragment_leaderboard" />
+
+    <fragment
+        android:id="@+id/nav_game_options_multiplayer"
+        android:name="group10.com.guesstheera.mainview.MultiplayerGameOptionsFragment"
+        android:label="Game Options"
+        tools:layout="@layout/singleplayer_fragment_game_options" />
+
+    <fragment
+        android:id="@+id/nav_game_options"
+        android:name="group10.com.guesstheera.mainview.GameOptionsFragment"
+        android:label="Settings"
+        tools:layout="@layout/game_settings_dialog"/>
+
+</navigation>

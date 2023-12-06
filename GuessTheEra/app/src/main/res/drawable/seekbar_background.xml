@@ -1,0 +1,88 @@
+<!-- res/drawable/seekbar_background.xml -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- SeekBar Track -->
+    <item android:id="@android:id/background">
+        <shape>
+            <solid android:color="@android:color/transparent"/> <!-- Color for the track -->
+            <size android:height="1dp"/> <!-- Height of the track -->
+        </shape>
+    </item>
+
+    <!-- SeekBar Notches -->
+    <!-- Each notch will be 1dp wide and 10dp high -->
+    <!-- Adjust the left margin for each notch according to your SeekBar width -->
+    <!-- Example below is for a SeekBar width of 300dp -->
+    <item android:top="6dp" android:bottom="6dp">
+        <shape>
+            <solid android:color="@color/coffee"/> <!-- Color for the notches -->
+        </shape>
+    </item>
+    <!-- Notch 1 (Starting notch) -->
+    <item android:width="3dp" android:height="20dp" android:left="0dp">
+        <shape>
+            <solid android:color="@color/coffee"/>
+        </shape>
+    </item>
+    <!-- Notch 2 -->
+    <item android:width="3dp" android:height="20dp" android:left="30dp">
+        <shape>
+            <solid android:color="@color/coffee"/>
+        </shape>
+    </item>
+    <item android:width="3dp" android:height="20dp" android:left="60dp">
+        <shape>
+            <solid android:color="@color/coffee"/>
+        </shape>
+    </item>
+    <item android:width="3dp" android:height="20dp" android:left="90dp">
+        <shape>
+            <solid android:color="@color/coffee"/>
+        </shape>
+    </item>
+    <item android:width="3dp" android:height="20dp" android:left="120dp">
+        <shape>
+            <solid android:color="@color/coffee"/>
+        </shape>
+    </item>
+    <item android:width="3dp" android:height="20dp" android:left="150dp">
+        <shape>
+            <solid android:color="@color/coffee"/>
+        </shape>
+    </item>
+    <item android:width="3dp" android:height="20dp" android:left="180dp">
+        <shape>
+            <solid android:color="@color/coffee"/>
+        </shape>
+    </item>
+    <item android:width="3dp" android:height="20dp" android:left="210dp">
+        <shape>
+            <solid android:color="@color/coffee"/>
+        </shape>
+    </item>
+    <item android:width="3dp" android:height="20dp" android:left="240dp">
+        <shape>
+            <solid android:color="@color/coffee"/>
+        </shape>
+    </item>
+    <item android:width="3dp" android:height="20dp" android:left="270dp">
+        <shape>
+            <solid android:color="@color/coffee"/>
+        </shape>
+    </item>
+    <item android:width="3dp" android:height="20dp" android:left="300dp">
+        <shape>
+            <solid android:color="@color/coffee"/>
+        </shape>
+    </item>
+    <item android:width="3dp" android:height="20dp" android:left="330dp">
+        <shape>
+            <solid android:color="@color/coffee"/>
+        </shape>
+    </item>
+
+    <item android:width="3dp" android:height="20dp" android:gravity="right">
+        <shape>
+            <solid android:color="@color/coffee"/>
+        </shape>
+    </item>
+</layer-list>

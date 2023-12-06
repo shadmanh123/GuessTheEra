@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="sage">#C0BDA5</color>
-    <color name="YInMn_Blue">#08549B</color>
+    <color name="yinmin_blue">#08549B</color>
     <color name="atomic_tangerine">#F39C6B</color>
     <color name="coffee">#81523F</color>
     <color name="mauve">#EDC9FF</color>

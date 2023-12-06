@@ -1,3 +1,44 @@
 <resources>
     <string name="app_name">GuessTheEra</string>
+    <string name="guess_the_era">Guess the Era</string>
+    <string name="placeholder_main_drawer_menu">placeholder main drawer menu</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Guess The Era</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <string name="game_settings">Game Settings</string>
+    <string name="leaderboard">Leaderboard</string>
+    <string name="game_options">Game Options</string>
+    <string name="difficulty">Difficulty</string>
+    <string name="regular_mode">Regular</string>
+    <string name="hard_mode">Hard</string>
+    <!--    <string name="default_web_client_id">498594274931-avsd5706e2couqdvr3jph7cno391s4it.apps.googleusercontent.com</string>-->
+    <string name="default_web_client_id">498594274931-ecra2d58d3eg0vj7ec0cpaj0n34bk0v9.apps.googleusercontent.com</string>
+    <string name="quick_settings">Quick Settings</string>
+    <string name="something3" />
+    <string name="something2" />
+    <string name="something" />
+    <string name="cancel">Cancel</string>
+    <string name="confirm">Confirm</string>
+    <string name="time_per_round">Customize Time Per Round</string>
+    <string name="image_year_range">Customize Image Year Range</string>
+    <string name="adjust">Adjust</string>
+    <string name="guess_accuracy_range">Regular or Hard Mode</string>
+    <string name="set">Set</string>
+    <string name="adjust_time">Adjust Time</string>
+    <string name="by_the_year">Hard (By Year)</string>
+    <string name="by_the_decade">Regular (By Decade)</string>
+    <string name="earliest_year_picker">Earliest Year Picker:</string>
+    <string name="latest_year_picker">Latest Year Picker:</string>
+    <string name="web_client_id">1040859154514-dck784ebu5vuku3s98io3ljou563mevd.apps.googleusercontent.com</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="high_score">High Score:</string>
+    <string name="wins"># Wins:</string>
+    <string name="user_email">User Email:</string>
 </resources>

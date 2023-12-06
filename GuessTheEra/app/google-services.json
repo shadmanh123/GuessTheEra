@@ -1,0 +1,56 @@
+{
+  "project_info": {
+    "project_number": "1040859154514",
+    "firebase_url": "https://guesstheera-default-rtdb.firebaseio.com",
+    "project_id": "guesstheera",
+    "storage_bucket": "guesstheera.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1040859154514:android:75ac55e3535476e05e778b",
+        "android_client_info": {
+          "package_name": "group10.com.guesstheera"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1040859154514-255m1kv8iv8lqeafltaq4460t54113kg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "group10.com.guesstheera",
+            "certificate_hash": "33979ad2a382ea5f87091479629654d1de7229b8"
+          }
+        },
+        {
+          "client_id": "1040859154514-3amuj5v0thqkmseh7gms3s19fnfmt1k7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "group10.com.guesstheera",
+            "certificate_hash": "520161d4f32056e0d1f32de5d2c8e2e4fd837586"
+          }
+        },
+        {
+          "client_id": "1040859154514-dck784ebu5vuku3s98io3ljou563mevd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBuYQ-P6Oz5ChtVXF4N0oVdPUC_0_FiNUk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1040859154514-dck784ebu5vuku3s98io3ljou563mevd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

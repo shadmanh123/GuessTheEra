@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- to use: set button's android:background="@drawable/rounded_button"
+        don't set a color for the button -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="@color/yinmin_blue"/>
+    <corners android:radius="16dp"/>
+</shape>
